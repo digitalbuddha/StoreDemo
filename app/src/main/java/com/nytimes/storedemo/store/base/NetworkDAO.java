@@ -1,6 +1,6 @@
 package com.nytimes.storedemo.store.base;
 
-import com.nytimes.storedemo.store.util.Id;
+import com.nytimes.storedemo.util.Id;
 
 import rx.Observable;
 

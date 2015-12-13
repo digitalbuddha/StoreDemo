@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.store.util;
+package com.nytimes.storedemo.util;
 
 import java.io.File;
 

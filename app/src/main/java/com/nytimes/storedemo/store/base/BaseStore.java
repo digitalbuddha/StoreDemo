@@ -4,17 +4,15 @@ import android.support.annotation.NonNull;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.nytimes.storedemo.store.util.Id;
-import com.nytimes.storedemo.store.util.OnErrorResumeWithEmpty;
+import com.nytimes.storedemo.util.Id;
+import com.nytimes.storedemo.util.OnErrorResumeWithEmpty;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func0;
 import rx.functions.Func1;
 
 /**
@@ -24,6 +22,9 @@ import rx.functions.Func1;
  * @param <Parsed> data type after parsing
  *                 <p/>
  *                 Example usage:  {@link }
+ *
+ *                get = cached data if not stale
+ *                network=skip memory and disk
  */
 public abstract class BaseStore<Raw, Parsed> {
 //    private static final Logger LOGGER = LoggerFactory.getLogger(BaseStore.class);
@@ -49,7 +50,7 @@ public abstract class BaseStore<Raw, Parsed> {
      * @param id
      * @return an observable from the first data source that is available
      */
-    protected Observable<Parsed> get(@NonNull final Id<Parsed> id) {
+    public Observable<Parsed> get(@NonNull final Id<Parsed> id) {
 //        LOGGER.info("Getting from Store");
 
         return Observable.concat(
@@ -64,15 +65,12 @@ public abstract class BaseStore<Raw, Parsed> {
      */
     protected Observable<Parsed> memory(@NonNull final Id<Parsed> id) {
         return Observable
-                .defer(new Func0<Observable<Parsed>>() {
-                    @Override
-                    public Observable<Parsed> call() {
+                .defer(() -> {
 //                        LOGGER.info("Getting  from memory");
-                        Parsed data = memory.getIfPresent(id);
-                        return data == null ? Observable.<Parsed>empty() : Observable.just(data);
-                    }
+                    Parsed data = memory.getIfPresent(id);
+                    return data == null ? Observable.<Parsed>empty() : Observable.just(data);
                 })
-                .onErrorResumeNext(new OnErrorResumeWithEmpty<Parsed>());
+                .onErrorResumeNext(new OnErrorResumeWithEmpty<>());
     }
 
     /**
@@ -97,14 +95,11 @@ public abstract class BaseStore<Raw, Parsed> {
     protected Observable<Parsed> disk(@NonNull final Id<Parsed> id) {
         return getDiskDAO().getData(id)
                 .map(parser())
-                .doOnNext(new Action1<Parsed>() {
-                    @Override
-                    public void call(Parsed parsed) {
+                .doOnNext(parsed -> {
 //                        LOGGER.info("Getting  from disk and updating memory");
-                        updateMemory(id, parsed);
-                    }
+                    updateMemory(id, parsed);
                 })
-                .onErrorResumeNext(new OnErrorResumeWithEmpty<Parsed>());
+                .onErrorResumeNext(new OnErrorResumeWithEmpty<>());
     }
 
     /**
@@ -113,7 +108,7 @@ public abstract class BaseStore<Raw, Parsed> {
      *
      * @return data from network and store it in memory and disk
      */
-    protected Observable<Parsed> network(@NonNull final Id<Parsed> id) {
+    public Observable<Parsed> network(@NonNull final Id<Parsed> id) {
         return getDataFromNetworkAndSave(id);
     }
 
@@ -128,12 +123,7 @@ public abstract class BaseStore<Raw, Parsed> {
      */
     protected Observable<Parsed> getDataFromNetworkAndSave(@NonNull final Id<Parsed> id) {
         try {
-            return inFlightRequests.get(id, new Callable<Observable<Parsed>>() {
-                @Override
-                public Observable<Parsed> call()  {
-                    return getNetworkResponse(id).cache();
-                }
-            });
+            return inFlightRequests.get(id, () -> getNetworkResponse(id).cache());
         } catch (ExecutionException e) {
             return Observable.empty();
         }
@@ -142,23 +132,15 @@ public abstract class BaseStore<Raw, Parsed> {
     @NonNull
     protected Observable<Parsed> getNetworkResponse(@NonNull final Id<Parsed> id) {
         return getNetworkDAO().fetch(id)
-                .map(new Func1<Raw, Parsed>() {
-                    @Override
-                    public Parsed call(Raw raw) {
+                .map(raw -> {
 //                        LOGGER.info("Getting  from network updating memory and disk");
-                       //parse before save to disk to make sure no parsing errors
-                        Parsed parsedData = parser().call(raw);
-                        save(id).call(raw);
-                        updateMemory(id, parsedData);
-                        return parsedData;
-                    }
+                   //parse before save to disk to make sure no parsing errors
+                    Parsed parsedData = parser().call(raw);
+                    save(id).call(raw);
+                    updateMemory(id, parsedData);
+                    return parsedData;
                 })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        inFlightRequests.invalidate(id);
-                    }
-                });
+                .doOnError(throwable -> inFlightRequests.invalidate(id));
 
 
     }
@@ -217,12 +199,7 @@ public abstract class BaseStore<Raw, Parsed> {
      * currently disk save is done asynchronously after memory has been updated
      */
     protected Action1<Raw> save(@NonNull final Id<Parsed> id) {
-        return new Action1<Raw>() {
-            @Override
-            public void call(Raw rawData) {
-                getDiskDAO().store(id, rawData).subscribe();
-            }
-        };
+        return rawData -> getDiskDAO().store(id, rawData).subscribe();
     }
 }
 

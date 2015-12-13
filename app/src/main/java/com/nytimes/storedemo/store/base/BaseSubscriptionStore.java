@@ -2,10 +2,9 @@ package com.nytimes.storedemo.store.base;
 
 import android.support.annotation.NonNull;
 
-import com.nytimes.storedemo.store.util.Id;
+import com.nytimes.storedemo.util.Id;
 
 import rx.Observable;
-import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -13,6 +12,7 @@ import rx.subjects.BehaviorSubject;
  *
  * @param <Raw>    data type before parsing
  * @param <Parsed> data type after parsing
+ *
  */
 public abstract class BaseSubscriptionStore<Raw, Parsed> extends BaseStore<Raw, Parsed> {
 
@@ -28,34 +28,14 @@ public abstract class BaseSubscriptionStore<Raw, Parsed> extends BaseStore<Raw, 
      * Any client that subscribers to the steam will receive updates for all data of
      * type {@link Parsed}
      */
-    protected abstract Observable<Parsed> stream();
+    public  Observable<Parsed> stream(){
+        return subject.asObservable();
+    }
 
     @Override
     protected Observable<Parsed> getNetworkResponse(@NonNull Id<Parsed> id) {
         return super.getNetworkResponse(id)
-                .doOnNext(new Action1<Parsed>() {
-                    @Override
-                    public void call(Parsed data) {
-                        notifySubscribers(data);
-                    }
-                });
-    }
-
-    /**
-     * Get data stream for Subjects with the argument id
-     *
-     * @return
-     */
-    protected Observable<Parsed> getStream(Id<Parsed> id) {
-
-        Observable<Parsed> stream = subject.asObservable();
-
-        //If nothing was emitted through the subject yet, start stream with get() value
-        if (!subject.hasValue()) {
-            return stream.startWith(get(id));
-        }
-
-        return stream;
+                .doOnNext(data -> notifySubscribers(data));
     }
 
     /**

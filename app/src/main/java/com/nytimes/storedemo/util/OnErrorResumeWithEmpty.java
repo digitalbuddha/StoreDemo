@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.store.util;
+package com.nytimes.storedemo.util;
 
 import rx.Observable;
 import rx.functions.Func1;

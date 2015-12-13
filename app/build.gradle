@@ -1,9 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.nytimes.storedemo"
         minSdkVersion 15
@@ -33,5 +37,10 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
     compile 'com.google.guava:guava:19.0'
+    apt 'org.immutables:value:2.1.0'
+    provided 'org.immutables:value:2.1.0'
+    compile 'org.immutables:gson:2.1.0'
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
+
 
 }
