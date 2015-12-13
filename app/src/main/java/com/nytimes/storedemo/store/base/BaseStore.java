@@ -1,6 +1,5 @@
 package com.nytimes.storedemo.store.base;
 
-import android.os.Debug;
 import android.support.annotation.NonNull;
 
 import com.google.common.cache.Cache;
@@ -103,7 +102,6 @@ public abstract class BaseStore<Raw, Parsed> {
                     public void call(Parsed parsed) {
 //                        LOGGER.info("Getting  from disk and updating memory");
                         updateMemory(id, parsed);
-                        Debug.stopMethodTracing();
                     }
                 })
                 .onErrorResumeNext(new OnErrorResumeWithEmpty<Parsed>());
@@ -132,7 +130,7 @@ public abstract class BaseStore<Raw, Parsed> {
         try {
             return inFlightRequests.get(id, new Callable<Observable<Parsed>>() {
                 @Override
-                public Observable<Parsed> call() {
+                public Observable<Parsed> call()  {
                     return getNetworkResponse(id).cache();
                 }
             });
@@ -147,10 +145,11 @@ public abstract class BaseStore<Raw, Parsed> {
                 .map(new Func1<Raw, Parsed>() {
                     @Override
                     public Parsed call(Raw raw) {
-                        LOGGER.info("Getting  from network updating memory and disk");
+//                        LOGGER.info("Getting  from network updating memory and disk");
+                       //parse before save to disk to make sure no parsing errors
                         Parsed parsedData = parser().call(raw);
-                        updateMemory(id, parsedData);
                         save(id).call(raw);
+                        updateMemory(id, parsedData);
                         return parsedData;
                     }
                 })
@@ -164,12 +163,7 @@ public abstract class BaseStore<Raw, Parsed> {
 
     }
 
-    /**
-     * Only update memory after disk has been successfully update
-     *
-     * @param id
-     * @param data
-     */
+
     protected void updateMemory(@NonNull final Id<Parsed> id, final Parsed data) {
         memory.put(id, data);
     }
@@ -209,7 +203,7 @@ public abstract class BaseStore<Raw, Parsed> {
     /**
      * @return DiskDAO that stores and stores <Raw> data
      */
-    protected abstract BaseDiskDAO<Raw, Parsed> getDiskDAO();
+    protected abstract DiskDAO<Raw, Parsed> getDiskDAO();
 
     /**
      *
@@ -219,23 +213,14 @@ public abstract class BaseStore<Raw, Parsed> {
     protected abstract Func1<Raw, Parsed> parser();
 
     /**
-     * Save latestfeed string to disk and object to memory if disk save succeeds
+     * Save raw data to disk
+     * currently disk save is done asynchronously after memory has been updated
      */
     protected Action1<Raw> save(@NonNull final Id<Parsed> id) {
         return new Action1<Raw>() {
             @Override
             public void call(Raw rawData) {
-                getDiskDAO().store(id, rawData).subscribe(new NYTSubscriber<Record<Parsed>>(BaseStore.class) {
-                    @Override
-                    public void onNext(Record<Parsed> parsedRecord) {
-                        //do nothing
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        LOGGER.error("Failed to save parsed data of {} to disk. {}", id, throwable);
-                    }
-                });
+                getDiskDAO().store(id, rawData).subscribe();
             }
         };
     }

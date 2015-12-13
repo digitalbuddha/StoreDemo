@@ -2,14 +2,11 @@ package com.nytimes.storedemo.store.base;
 
 import android.support.annotation.NonNull;
 
-import com.nytimes.android.io.Id;
-import com.nytimes.android.io.network.Priority;
 import com.nytimes.storedemo.store.util.Id;
 
 import rx.Observable;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.Subject;
 
 /**
  * Base class for handling Raw and Parsed data subscription logic
@@ -19,7 +16,7 @@ import rx.subjects.Subject;
  */
 public abstract class BaseSubscriptionStore<Raw, Parsed> extends BaseStore<Raw, Parsed> {
 
-    private final Subject<Parsed, Parsed> subject;
+    private final BehaviorSubject<Parsed> subject;
 
     public BaseSubscriptionStore() {
         super();
