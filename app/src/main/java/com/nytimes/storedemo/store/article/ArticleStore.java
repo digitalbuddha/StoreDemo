@@ -2,7 +2,7 @@ package com.nytimes.storedemo.store.article;
 
 
 import com.nytimes.storedemo.model.ArticleEnvelope;
-import com.nytimes.storedemo.store.base.BaseStore;
+import com.nytimes.storedemo.store.base.Store;
 import com.nytimes.storedemo.store.base.DiskDAO;
 import com.nytimes.storedemo.store.base.NetworkDAO;
 
@@ -15,7 +15,7 @@ import rx.functions.Func1;
  * Created by 206847 on 12/13/15.
  */
 @Singleton
-public class ArticleStore extends BaseStore<String, ArticleEnvelope> {
+public class ArticleStore extends Store<String, ArticleEnvelope> {
     @Inject
     ArticleParser parser;
     @Inject

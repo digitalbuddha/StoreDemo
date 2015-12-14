@@ -9,14 +9,14 @@ import java.util.Set;
  */
 public class StoreClerk {
 
-    private static final Set<BaseStore> storeSet = Collections.synchronizedSet(new HashSet<BaseStore>());
+    private static final Set<Store> storeSet = Collections.synchronizedSet(new HashSet<Store>());
 
     /**
-     * Called by construct of {@link BaseStore} to allow management by StoreClerk
+     * Called by construct of {@link Store} to allow management by StoreClerk
      *
      * @param store
      */
-    public static <Raw, Parsed> void register(BaseStore<Raw, Parsed> store) {
+    public static <Raw, Parsed> void register(Store<Raw, Parsed> store) {
         storeSet.add(store);
     }
 
@@ -24,7 +24,7 @@ public class StoreClerk {
      * Clear memory for all stores
      */
     public static void clearMemory() {
-        for (BaseStore store : storeSet) {
+        for (Store store : storeSet) {
             store.clearMemory();
         }
     }

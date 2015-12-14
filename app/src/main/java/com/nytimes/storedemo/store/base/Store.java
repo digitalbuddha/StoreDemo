@@ -26,8 +26,8 @@ import rx.functions.Func1;
  *                get = cached data if not stale
  *                network=skip memory and disk
  */
-public abstract class BaseStore<Raw, Parsed> {
-//    private static final Logger LOGGER = LoggerFactory.getLogger(BaseStore.class);
+public abstract class Store<Raw, Parsed> {
+//    private static final Logger LOGGER = LoggerFactory.getLogger(Store.class);
 
     //Servers to prevent network request duplications
     protected final Cache<Id<Parsed>, Observable<Parsed>> inFlightRequests;
@@ -35,7 +35,7 @@ public abstract class BaseStore<Raw, Parsed> {
     //Memory cache
     private final Cache<Id<Parsed>, Parsed> memory;
 
-    public BaseStore() {
+    public Store() {
         StoreClerk.register(this);
         inFlightRequests = CacheBuilder.newBuilder()
                 .expireAfterWrite(TimeUnit.MINUTES.toMillis(1), TimeUnit.MILLISECONDS)

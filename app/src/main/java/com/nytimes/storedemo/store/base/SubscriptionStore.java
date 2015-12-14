@@ -14,11 +14,11 @@ import rx.subjects.BehaviorSubject;
  * @param <Parsed> data type after parsing
  *
  */
-public abstract class BaseSubscriptionStore<Raw, Parsed> extends BaseStore<Raw, Parsed> {
+public abstract class SubscriptionStore<Raw, Parsed> extends Store<Raw, Parsed> {
 
     private final BehaviorSubject<Parsed> subject;
 
-    public BaseSubscriptionStore() {
+    public SubscriptionStore() {
         super();
         subject = BehaviorSubject.create();
     }
