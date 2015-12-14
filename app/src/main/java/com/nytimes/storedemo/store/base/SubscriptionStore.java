@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.nytimes.storedemo.util.Id;
 
 import rx.Observable;
+import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -18,8 +19,8 @@ public abstract class SubscriptionStore<Raw, Parsed> extends Store<Raw, Parsed> 
 
     private final BehaviorSubject<Parsed> subject;
 
-    public SubscriptionStore() {
-        super();
+    public SubscriptionStore(Func1<Raw, Parsed> parser, DiskDAO<Raw, Parsed> diskDAO, NetworkDAO<Raw, Parsed> networkDAO) {
+        super(parser,diskDAO,networkDAO);
         subject = BehaviorSubject.create();
     }
 

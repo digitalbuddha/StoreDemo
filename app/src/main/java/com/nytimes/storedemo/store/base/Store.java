@@ -20,11 +20,11 @@ import rx.functions.Func1;
  *
  * @param <Raw>    data type before parsing
  * @param <Parsed> data type after parsing
- *                 <p/>
+ *                 <p>
  *                 Example usage:  {@link }
- *
- *                get = cached data if not stale
- *                network=skip memory and disk
+ *                 <p>
+ *                 get = cached data if not stale
+ *                 network=skip memory and disk
  */
 public abstract class Store<Raw, Parsed> {
 //    private static final Logger LOGGER = LoggerFactory.getLogger(Store.class);
@@ -34,8 +34,12 @@ public abstract class Store<Raw, Parsed> {
 
     //Memory cache
     private final Cache<Id<Parsed>, Parsed> memory;
+    protected Func1<Raw, Parsed> parser;
+    protected DiskDAO<Raw, Parsed> diskDAO;
+    protected final NetworkDAO<Raw, Parsed> networkDAO;
 
-    public Store() {
+
+    public Store(Func1<Raw, Parsed> parser, DiskDAO<Raw, Parsed> diskDAO, NetworkDAO<Raw, Parsed> networkDAO) {
         StoreClerk.register(this);
         inFlightRequests = CacheBuilder.newBuilder()
                 .expireAfterWrite(TimeUnit.MINUTES.toMillis(1), TimeUnit.MILLISECONDS)
@@ -44,6 +48,9 @@ public abstract class Store<Raw, Parsed> {
                 .maximumSize(getCacheSize())
                 .expireAfterAccess(getCacheTTL(), TimeUnit.MILLISECONDS)
                 .build();
+        this.parser = parser;
+        this.diskDAO = diskDAO;
+        this.networkDAO = networkDAO;
     }
 
     /**
@@ -114,11 +121,11 @@ public abstract class Store<Raw, Parsed> {
 
     /**
      * There should only be one network request in flight at any give time.
-     * <p/>
+     * <p>
      * Return cached request in the form of a Behavior Subject which will emit to its subscribers the
      * last value it gets. Subject/Observable is cached in a {@link ConcurrentMap} to maintain thread safety.
      *
-     * @param id       resource identifier
+     * @param id resource identifier
      * @return observable that emits a {@link Parsed} value
      */
     protected Observable<Parsed> getDataFromNetworkAndSave(@NonNull final Id<Parsed> id) {
@@ -134,7 +141,7 @@ public abstract class Store<Raw, Parsed> {
         return getNetworkDAO().fetch(id)
                 .map(raw -> {
 //                        LOGGER.info("Getting  from network updating memory and disk");
-                   //parse before save to disk to make sure no parsing errors
+                    //parse before save to disk to make sure no parsing errors
                     Parsed parsedData = parser().call(raw);
                     save(id).call(raw);
                     updateMemory(id, parsedData);
@@ -182,17 +189,18 @@ public abstract class Store<Raw, Parsed> {
         return 1;
     }
 
-    /**
-     * @return DiskDAO that stores and stores <Raw> data
-     */
-    protected abstract DiskDAO<Raw, Parsed> getDiskDAO();
 
-    /**
-     *
-     */
-    protected abstract NetworkDAO<Raw, Parsed> getNetworkDAO();
+    protected DiskDAO<Raw, Parsed> getDiskDAO() {
+        return diskDAO;
+    }
 
-    protected abstract Func1<Raw, Parsed> parser();
+    protected NetworkDAO<Raw, Parsed> getNetworkDAO() {
+        return networkDAO;
+    }
+
+    protected Func1<Raw, Parsed> parser() {
+        return parser;
+    }
 
     /**
      * Save raw data to disk
