@@ -38,12 +38,10 @@ public abstract class Store<Raw, Parsed> {
         this.networkDAO = networkDAO;
     }
 
-    public Store(Func1<Raw, Parsed> parser, DiskLoader<Raw, Parsed> diskLoader,DiskSaver<Raw, Parsed> diskSaver,
+    public Store(Func1<Raw, Parsed> parser, DiskLoader<Raw, Parsed> diskLoader, DiskSaver<Raw, Parsed> diskSaver,
                  NetworkDAO<Raw, Parsed> networkDAO) {
         cache = MemoryCache.create();
-
-
-
+        this.diskDAO = DiskSplitDAO.create(diskLoader, diskSaver);
         this.parser = parser;
         this.networkDAO = networkDAO;
     }
