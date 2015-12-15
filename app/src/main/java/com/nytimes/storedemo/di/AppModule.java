@@ -4,9 +4,9 @@ import android.app.Application;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapterFactory;
-
-import java.util.ServiceLoader;
+import com.nytimes.storedemo.model.GsonAdaptersArticle;
+import com.nytimes.storedemo.model.GsonAdaptersArticleEnvelope;
+import com.nytimes.storedemo.model.GsonAdaptersImage;
 
 import javax.inject.Singleton;
 
@@ -26,9 +26,10 @@ public class AppModule {
     @Provides
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        for (TypeAdapterFactory factory : ServiceLoader.load(TypeAdapterFactory.class)) {
-            gsonBuilder.registerTypeAdapterFactory(factory);
-        }
+        gsonBuilder.registerTypeAdapterFactory(new GsonAdaptersArticleEnvelope());
+        gsonBuilder.registerTypeAdapterFactory(new GsonAdaptersArticle());
+        gsonBuilder.registerTypeAdapterFactory(new GsonAdaptersImage());
+
         return gsonBuilder.create();
     }
 

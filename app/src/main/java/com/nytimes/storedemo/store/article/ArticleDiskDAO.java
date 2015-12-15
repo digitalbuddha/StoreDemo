@@ -19,7 +19,7 @@ import rx.Observable;
 public class ArticleDiskDAO implements DiskDAO<String, ArticleEnvelope> {
 
     //This would normally be an implementation of SQL Lite or File Storage
-    private static String fakeDiskStorage;
+    private static String fakeDiskStorage=null;
 
     @Inject
     public ArticleDiskDAO() {
@@ -27,7 +27,7 @@ public class ArticleDiskDAO implements DiskDAO<String, ArticleEnvelope> {
 
     @Override
     public Observable<String> getData(Id<ArticleEnvelope> id) {
-        return Observable.fromCallable(() -> fakeDiskStorage);
+        return fakeDiskStorage==null?Observable.<String>empty(): Observable.fromCallable(() -> fakeDiskStorage);
     }
 
     @Override

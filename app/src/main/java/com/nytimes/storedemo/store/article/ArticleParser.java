@@ -20,6 +20,6 @@ public class ArticleParser implements Func1<String, ArticleEnvelope> {
 
     @Override
     public ArticleEnvelope call(String s) {
-        return new Gson().fromJson(s, ArticleEnvelope.class);
+        return gson.fromJson(s, ArticleEnvelope.class);
     }
 }

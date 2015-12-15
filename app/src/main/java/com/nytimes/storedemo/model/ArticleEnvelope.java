@@ -8,5 +8,5 @@ import java.util.List;
 @Value.Immutable
 @Gson.TypeAdapters
 public abstract class ArticleEnvelope {
-    public abstract List<Article> article();
+    public abstract List<Article> articles();
 }

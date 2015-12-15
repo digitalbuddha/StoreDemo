@@ -36,6 +36,6 @@ public class MainPresenter implements Presenter<MainView> {
 
     public Observable<List<Article>> getArticles() {
         return store.get(Id.of(ArticleEnvelope.class, FAKE_PARAM))
-                .map(ArticleEnvelope::article);
+                .map(ArticleEnvelope::articles);
     }
 }
