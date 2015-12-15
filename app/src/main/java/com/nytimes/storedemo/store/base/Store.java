@@ -38,6 +38,16 @@ public abstract class Store<Raw, Parsed> {
         this.networkDAO = networkDAO;
     }
 
+    public Store(Func1<Raw, Parsed> parser, DiskLoader<Raw, Parsed> diskLoader,DiskSaver<Raw, Parsed> diskSaver,
+                 NetworkDAO<Raw, Parsed> networkDAO) {
+        cache = MemoryCache.create();
+
+
+
+        this.parser = parser;
+        this.networkDAO = networkDAO;
+    }
+
     /**
      * @param id
      * @return an observable from the first data source that is available
