@@ -18,15 +18,19 @@ import javax.inject.Inject;
 public class MainView extends CoordinatorLayout {
     @Inject
     MainPresenter presenter;
+
     public MainView(Context context) {
         this(context, null);
     }
+
     public MainView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     public MainView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        ((DemoApplication) context.getApplicationContext()).getApplicationComponent().inject(this);
+        ((DemoApplication) context.getApplicationContext())
+                .getApplicationComponent().inject(this);
     }
 
     @Override
@@ -41,9 +45,6 @@ public class MainView extends CoordinatorLayout {
                 .subscribe(articles -> {
             displayArticles();
         });
-
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
     }
 
     private void displayArticles() {
