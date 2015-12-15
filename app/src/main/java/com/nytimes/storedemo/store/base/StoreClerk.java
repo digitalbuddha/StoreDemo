@@ -21,7 +21,7 @@ public class StoreClerk {
     }
 
     /**
-     * Clear memory for all stores
+     * Clear get for all stores
      */
     public static void clearMemory() {
         for (Store store : storeSet) {
