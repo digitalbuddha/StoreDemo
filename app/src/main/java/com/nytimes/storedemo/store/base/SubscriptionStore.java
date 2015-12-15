@@ -5,22 +5,20 @@ import android.support.annotation.NonNull;
 import com.nytimes.storedemo.util.Id;
 
 import rx.Observable;
-import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
 
 /**
  * Base class for handling Raw and Parsed data subscription logic
  *
- * @param <Raw>    data type before parsing
  * @param <Parsed> data type after parsing
  *
  */
-public abstract class SubscriptionStore<Raw, Parsed> extends Store<Raw, Parsed> {
+public abstract class SubscriptionStore< Parsed> extends Store< Parsed> {
 
     private final BehaviorSubject<Parsed> subject;
 
-    public SubscriptionStore(Func1<Raw, Parsed> parser, DiskDAO<Raw, Parsed> diskDAO, NetworkDAO<Raw, Parsed> networkDAO) {
-        super(parser,diskDAO,networkDAO);
+    public SubscriptionStore( NetworkDAO<Parsed> networkDAO) {
+        super(networkDAO);
         subject = BehaviorSubject.create();
     }
 
