@@ -1,6 +1,7 @@
 package com.nytimes.storedemo;
 
 import com.nytimes.storedemo.di.AppComponent;
+import com.nytimes.storedemo.di.AppModule;
 import com.nytimes.storedemo.di.DaggerAppComponent;
 
 public class DemoApplication extends android.app.Application {
@@ -10,6 +11,7 @@ public class DemoApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         component = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
                 .build();
     }
 

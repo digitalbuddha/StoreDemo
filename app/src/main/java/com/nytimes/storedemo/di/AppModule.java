@@ -1,5 +1,7 @@
 package com.nytimes.storedemo.di;
 
+import android.app.Application;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapterFactory;
@@ -14,7 +16,11 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    public AppModule() {}
+    private Application context;
+
+    public AppModule(Application context) {
+        this.context = context;
+    }
 
     @Singleton
     @Provides
@@ -25,4 +31,11 @@ public class AppModule {
         }
         return gsonBuilder.create();
     }
+
+    @Singleton
+    @Provides
+    Application provideApplication() {
+        return context;
+    }
+
 }
