@@ -3,12 +3,15 @@ package com.nytimes.storedemo.ui;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
+import com.nytimes.storedemo.model.Article;
+import com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,6 +21,8 @@ import javax.inject.Inject;
 public class MainView extends CoordinatorLayout {
     @Inject
     MainPresenter presenter;
+
+    ArticleRecyclerView articleRecyclerView;
 
     public MainView(Context context) {
         this(context, null);
@@ -37,17 +42,19 @@ public class MainView extends CoordinatorLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         presenter.bind(this);
+        articleRecyclerView = (ArticleRecyclerView) findViewById(R.id.articleRecyclerView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         RxView.clicks(fab)
                 .flatMap(aVoid -> presenter.getArticles())
                 .subscribe(articles -> {
-            displayArticles();
+            displayArticles(articles);
         });
     }
 
-    private void displayArticles() {
+    private void displayArticles(List<Article> articles) {
+        articleRecyclerView.setArticles(articles);
     }
 
     @Override
