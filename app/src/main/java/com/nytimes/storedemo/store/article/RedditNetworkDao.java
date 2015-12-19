@@ -9,9 +9,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-/**
- * Created by 206847 on 12/13/15.
- */
 public class RedditNetworkDao implements NetworkDAO<RedditData> {
     @Inject
     RedditApi api;
@@ -24,6 +21,6 @@ public class RedditNetworkDao implements NetworkDAO<RedditData> {
     @Override
     //will eventually go to retrofit & okhttp cache
     public Observable<RedditData> fetch(Id<RedditData> id) {
-     return   Observable.fromCallable(() ->api.aww());
+     return   Observable.fromCallable(api::aww);
     }
 }
