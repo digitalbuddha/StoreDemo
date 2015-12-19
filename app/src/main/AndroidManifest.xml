@@ -3,6 +3,7 @@
     package="com.nytimes.storedemo" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"

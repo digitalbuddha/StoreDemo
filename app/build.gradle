@@ -42,6 +42,6 @@ dependencies {
     compile 'org.immutables:gson:2.1.0'
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
