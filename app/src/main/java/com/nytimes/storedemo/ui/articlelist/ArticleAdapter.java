@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nytimes.storedemo.R;
-import com.nytimes.storedemo.model.Article;
+import com.nytimes.storedemo.model.Children;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import javax.inject.Inject;
  */
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
-    private List<Article> articles = new ArrayList<>();
+    private List<Children> articles = new ArrayList<>();
 
 
     @Inject
@@ -41,7 +41,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
         return articles.size();
     }
 
-    public void setArticles(List<Article> articlesToAdd) {
+    public void setArticles(List<Children> articlesToAdd) {
         articles.clear();
         articles.addAll(articlesToAdd);
         notifyDataSetChanged();

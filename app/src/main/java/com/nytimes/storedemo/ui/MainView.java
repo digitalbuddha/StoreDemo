@@ -55,12 +55,8 @@ public class MainView extends CoordinatorLayout {
     }
 
     private void displayArticles(List<Children> articles) {
-
-
-
         Log.e("############","THUG:");
-
-        //articleRecyclerView.setArticles(articles);
+        articleRecyclerView.setArticles(articles);
     }
 
     @Override

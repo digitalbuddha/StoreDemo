@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.nytimes.storedemo.DemoApplication;
-import com.nytimes.storedemo.model.Article;
-import com.nytimes.storedemo.ui.articlelist.ArticleAdapter;
-import com.nytimes.storedemo.ui.articlelist.DividerItemDecoration;
+import com.nytimes.storedemo.model.Children;
 
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class ArticleRecyclerView extends RecyclerView {
         articleAdapter.notifyDataSetChanged();
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(List<Children> articles) {
         articleAdapter.setArticles(articles);
     }
 }

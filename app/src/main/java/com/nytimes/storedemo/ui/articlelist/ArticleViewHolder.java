@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.nytimes.storedemo.R;
-import com.nytimes.storedemo.model.Article;
+import com.nytimes.storedemo.model.Children;
 
 /**
  * Created by brianplummer on 12/16/15.
@@ -19,7 +19,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         title = (TextView) itemView.findViewById(R.id.title);
     }
 
-    public void onBind(Article article) {
-        title.setText(article.title());
+    public void onBind(Children article) {
+        title.setText(article.data().title());
     }
 }
