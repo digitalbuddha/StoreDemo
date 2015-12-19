@@ -1,25 +1,18 @@
 package com.nytimes.storedemo.ui;
 
 import com.nytimes.storedemo.model.Children;
-import com.nytimes.storedemo.model.PostData;
-import com.nytimes.storedemo.model.PostNode;
 import com.nytimes.storedemo.model.RedditData;
 
-<<<<<<< 8e48d68a88888d52d8ada04773350f163805641d
-import com.nytimes.storedemo.model.Article;
 import com.nytimes.storedemo.store.article.RedditStore;
-=======
-import com.nytimes.storedemo.model.RedditData;
-import com.nytimes.storedemo.store.article.ArticleStore;
 import com.nytimes.storedemo.util.Id;
->>>>>>> start of data model
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Func1;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by 206847 on 12/13/15.
@@ -46,6 +39,8 @@ public class MainPresenter implements Presenter<MainView> {
 
     public Observable<List<Children>> getArticles(){
         return store.get(Id.of(RedditData.class, FAKE_PARAM))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(redditData -> redditData.data().children());
     }
 }
