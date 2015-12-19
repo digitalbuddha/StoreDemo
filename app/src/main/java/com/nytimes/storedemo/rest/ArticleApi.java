@@ -38,16 +38,15 @@ public class ArticleApi {
         try {
             ByteStreams.copy(inputStream, bos);
             text = bos.toString();
-        } catch (IOException e)
+        } catch (IOException ignored)
         {} finally {
-            if (bos != null)
-                try {
-                    bos.close();
-                } catch (IOException e) {}
+            try {
+                bos.close();
+            } catch (IOException ignored) {}
             if(inputStream != null)
                 try {
                     inputStream.close();
-                } catch (IOException e) {}
+                } catch (IOException ignored) {}
         }
         return text;
     }
