@@ -1,7 +1,7 @@
 package com.nytimes.storedemo.ui;
 
 import com.nytimes.storedemo.model.Article;
-import com.nytimes.storedemo.store.article.ArticleStore;
+import com.nytimes.storedemo.store.article.RedditStore;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import rx.Observable;
 public class MainPresenter implements Presenter<MainView> {
     public static final String FAKE_PARAM = "fakeKey";
     @Inject
-    ArticleStore store;
+    RedditStore store;
     private MainView view;
 
     @Inject

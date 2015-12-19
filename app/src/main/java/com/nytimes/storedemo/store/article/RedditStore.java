@@ -9,10 +9,10 @@ import javax.inject.Singleton;
 
 
 @Singleton
-public class ArticleStore extends Store<RedditData> {
+public class RedditStore extends Store<RedditData> {
 
     @Inject
-    public ArticleStore(ArticleNetworkDAO networkDAO) {
+    public RedditStore(RedditNetworkDao networkDAO) {
         super(networkDAO);
     }
 }

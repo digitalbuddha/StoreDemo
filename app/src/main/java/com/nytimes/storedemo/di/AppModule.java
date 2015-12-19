@@ -21,6 +21,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 
 @Module
 public class AppModule {
@@ -47,7 +48,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RedditApi provideRedditApi() {
+    RedditApi provideRedditApi(Gson gson) {
         OkHttpClient okHttpClient = new OkHttpClient();
         File cacheDir = new File(System.getProperty("java.io.tmpdir"), UUID.randomUUID().toString());
         try {
@@ -61,6 +62,7 @@ public class AppModule {
                 .setExecutors(executor, executor)
                 .setClient(new OkClient(okHttpClient))
                 .setEndpoint("reddit.com")
+                .setConverter(new GsonConverter(gson))
                 .build();
         return restAdapter.create(RedditApi.class);
     }

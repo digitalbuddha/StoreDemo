@@ -1,9 +1,7 @@
 package com.nytimes.storedemo.store.article;
 
-import com.google.gson.Gson;
 import com.nytimes.storedemo.model.RedditData;
-import com.nytimes.storedemo.model.ImmutableRedditData;
-import com.nytimes.storedemo.rest.ArticleApi;
+import com.nytimes.storedemo.rest.RedditApi;
 import com.nytimes.storedemo.store.base.NetworkDAO;
 import com.nytimes.storedemo.util.Id;
 
@@ -14,20 +12,18 @@ import rx.Observable;
 /**
  * Created by 206847 on 12/13/15.
  */
-public class ArticleNetworkDAO implements NetworkDAO<RedditData> {
+public class RedditNetworkDao implements NetworkDAO<RedditData> {
     @Inject
-    ArticleApi api;
+    RedditApi api;
+
 
     @Inject
-    Gson gson;
-
-    @Inject
-    public ArticleNetworkDAO() {
+    public RedditNetworkDao() {
     }
 
     @Override
     //will eventually go to retrofit & okhttp cache
     public Observable<RedditData> fetch(Id<RedditData> id) {
-     return   Observable.fromCallable(() -> gson.fromJson(api.getArticles(), ImmutableRedditData.class));
+     return   Observable.fromCallable(() ->api.aww());
     }
 }
