@@ -1,9 +1,7 @@
 package com.nytimes.storedemo.ui;
 
 import com.nytimes.storedemo.model.Article;
-import com.nytimes.storedemo.model.RedditData;
 import com.nytimes.storedemo.store.article.ArticleStore;
-import com.nytimes.storedemo.util.Id;
 
 import java.util.List;
 
@@ -35,7 +33,6 @@ public class MainPresenter implements Presenter<MainView> {
     }
 
     public Observable<List<Article>> getArticles(){
-        return store.get(Id.of(RedditData.class, FAKE_PARAM))
-                .map(RedditData::articles);
+        return null;
     }
 }
