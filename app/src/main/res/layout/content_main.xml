@@ -13,8 +13,9 @@
     tools:showIn="@layout/activity_main"
     tools:context=".MainActivity">
 
-    <TextView
-        android:text="Hello World!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView
+        android:id="@+id/articleRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"/>
 </RelativeLayout>
