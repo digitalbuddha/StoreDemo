@@ -4,5 +4,6 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 public abstract class RedditData {
-    public abstract Kind kind();
+    public abstract Data data();
+    public abstract String kind();
 }

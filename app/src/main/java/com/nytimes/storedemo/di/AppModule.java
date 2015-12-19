@@ -61,7 +61,7 @@ public class AppModule {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setExecutors(executor, executor)
                 .setClient(new OkClient(okHttpClient))
-                .setEndpoint("reddit.com")
+                .setEndpoint("http://reddit.com")
                 .setConverter(new GsonConverter(gson))
                 .build();
         return restAdapter.create(RedditApi.class);
