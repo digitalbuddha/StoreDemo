@@ -49,11 +49,16 @@ public class AppModule {
 
     @Singleton
     @Provides
-    OkHttpClient provideClient() {
+    OkHttpClient provideClient(File cacheDir) {
         OkHttpClient okHttpClient = new OkHttpClient();
-        File cacheDir = new File(System.getProperty("java.io.tmpdir"), UUID.randomUUID().toString());
         okHttpClient.setCache(new Cache(cacheDir, 1024));
         return okHttpClient;
+    }
+
+    @Singleton
+    @Provides
+    File provideCacheFile() {
+        return new File(System.getProperty("java.io.tmpdir"), UUID.randomUUID().toString());
     }
 
     @Singleton
@@ -71,7 +76,6 @@ public class AppModule {
             }
         };
     }
-
 
     @Singleton
     @Provides

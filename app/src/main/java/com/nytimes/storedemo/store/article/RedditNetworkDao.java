@@ -21,6 +21,6 @@ public class RedditNetworkDao implements NetworkDAO<RedditData> {
     @Override
     //will eventually go to retrofit & okhttp cache
     public Observable<RedditData> fetch(Id<RedditData> id) {
-     return   Observable.fromCallable(api::aww);
+        return api.aww();
     }
 }
