@@ -1,13 +1,18 @@
 package com.nytimes.storedemo.ui;
 
-import com.nytimes.storedemo.model.Article;
+import com.nytimes.storedemo.model.Children;
+import com.nytimes.storedemo.model.RedditData;
+
 import com.nytimes.storedemo.store.article.RedditStore;
+import com.nytimes.storedemo.util.Id;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by 206847 on 12/13/15.
@@ -32,7 +37,10 @@ public class MainPresenter implements Presenter<MainView> {
         view = null;
     }
 
-    public Observable<List<Article>> getArticles(){
-        return null;
+    public Observable<List<Children>> getArticles(){
+        return store.get(Id.of(RedditData.class, FAKE_PARAM))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(redditData -> redditData.data().children());
     }
 }
