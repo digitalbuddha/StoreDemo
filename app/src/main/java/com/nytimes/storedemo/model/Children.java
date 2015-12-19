@@ -11,5 +11,5 @@ import java.util.List;
 @Value.Immutable
 @Gson.TypeAdapters
 public abstract class Children {
-    public abstract List<PostNode> postNodeList();
+    public abstract PostData data();
 }
