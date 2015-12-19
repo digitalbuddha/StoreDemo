@@ -20,7 +20,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
     private List<Children> articles = new ArrayList<>();
 
-
     @Inject
     public ArticleAdapter () {}
 
@@ -44,6 +43,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
     public void setArticles(List<Children> articlesToAdd) {
         articles.clear();
         articles.addAll(articlesToAdd);
+        notifyDataSetChanged();
+    }
+
+    public void addArticle(Children article) {
+        articles.add(article);
         notifyDataSetChanged();
     }
 }
