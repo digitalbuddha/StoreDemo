@@ -20,9 +20,11 @@ Using retrofit request interceptors we are able to set those cache control heade
                 request.addHeader("Cache-Control",
                         "public, only-if-cached, max-stale=" + maxStale);
             }
-        ```
+        
+  ```
 
    When a new network request comes in while offline cached entry will be used for 4weeks, when network status comes back as good, online cached entry will be used for 1minute, otherwise network hit is made. We create a retrofit instance that uses the OkHttp client with cache.  We also add a request inteceptor with the above logic
+   
    ```
    RestAdapter.Builder()
                 .setClient(new OkClient(client))
