@@ -1,8 +1,8 @@
 package com.nytimes.storedemo;
 
 import com.nytimes.storedemo.di.AppComponent;
-import com.nytimes.storedemo.di.AppModule;
 import com.nytimes.storedemo.di.DaggerAppComponent;
+import com.nytimes.storedemo.di.StoreModule;
 
 public class DemoApplication extends android.app.Application {
     private AppComponent component;
@@ -11,10 +11,9 @@ public class DemoApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         component = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
+                .secretModule(new StoreModule(this))
                 .build();
     }
-
 
     public AppComponent getApplicationComponent() {
         return component;
