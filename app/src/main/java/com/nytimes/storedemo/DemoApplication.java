@@ -11,7 +11,7 @@ public class DemoApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         component = DaggerAppComponent.builder()
-                .secretModule(new StoreModule(this))
+                .storeModule(new StoreModule(this))
                 .build();
     }
 
