@@ -16,7 +16,7 @@ public class StoreClerk {
      *
      * @param store
      */
-    public static <Raw, Parsed> void register(Store<Raw, Parsed> store) {
+    public static <Raw, Parsed> void register(Store<Parsed> store) {
         storeSet.add(store);
     }
 

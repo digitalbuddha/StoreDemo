@@ -13,8 +13,6 @@ import java.io.InputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-
 /**
  * Created by 206847 on 12/13/15.
  */
@@ -28,9 +26,9 @@ public class ArticleApi {
         this.context = context;
     }
 
-    public Observable<String> getArticles() {
+    public String getArticles() {
         String text = getFromRawRes(R.raw.articles);
-        return Observable.fromCallable(() -> text);
+        return  text;
     }
 
     private String getFromRawRes(int resId) {
@@ -40,16 +38,15 @@ public class ArticleApi {
         try {
             ByteStreams.copy(inputStream, bos);
             text = bos.toString();
-        } catch (IOException e)
+        } catch (IOException ignored)
         {} finally {
-            if (bos != null)
-                try {
-                    bos.close();
-                } catch (IOException e) {}
+            try {
+                bos.close();
+            } catch (IOException ignored) {}
             if(inputStream != null)
                 try {
                     inputStream.close();
-                } catch (IOException e) {}
+                } catch (IOException ignored) {}
         }
         return text;
     }

@@ -5,25 +5,20 @@ import android.support.annotation.NonNull;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.nytimes.storedemo.util.Id;
-import com.nytimes.storedemo.util.OnErrorResumeWithEmpty;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 
 public class MemoryCache<Parsed> {//MemoryCache cache
     //in memory cache of data
-    final Cache<Id<Parsed>, Parsed> memory;
-    //Serves to prevent network request duplications
-    final Cache<Id<Parsed>, Observable<Parsed>> inFlightRequests;
+    final Cache<Id<Parsed>, Observable<Parsed>> memory;
 
     private MemoryCache() {
         memory = CacheBuilder.newBuilder()
                 .maximumSize(getCacheSize())
                 .expireAfterAccess(getCacheTTL(), TimeUnit.MILLISECONDS)
-                .build();
-        inFlightRequests = CacheBuilder.newBuilder()
-                .expireAfterWrite(TimeUnit.MINUTES.toMillis(1), TimeUnit.MILLISECONDS)
                 .build();
     }
 
@@ -34,18 +29,17 @@ public class MemoryCache<Parsed> {//MemoryCache cache
     /**
      * @return data from get
      */
-    protected Observable<Parsed> get(@NonNull final Id<Parsed> id) {
-        return Observable
-                .defer(() -> {
-//                        LOGGER.info("Getting  from get");
-                    Parsed data = memory.getIfPresent(id);
-                    return data == null ? Observable.<Parsed>empty() : Observable.just(data);
-                })
-                .onErrorResumeNext(new OnErrorResumeWithEmpty<Parsed>());
+    protected Observable<Parsed> get(@NonNull final Id<Parsed> id, Observable<Parsed> network) {
+        try {
+            return memory.get(id, () -> network);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return Observable.empty();
     }
 
     protected void update(@NonNull final Id<Parsed> id, final Parsed data) {
-        memory.put(id, data);
+        memory.put(id, Observable.just(data));
     }
 
     protected void clearMemory() {
