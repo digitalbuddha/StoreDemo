@@ -2,11 +2,8 @@ package com.nytimes.storedemo.ui;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
 import com.nytimes.storedemo.model.Children;
@@ -45,13 +42,10 @@ public class MainView extends CoordinatorLayout {
         presenter.bind(this);
         articleRecyclerView = (ArticleRecyclerView) findViewById(R.id.articleRecyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        RxView.clicks(fab)
-                .flatMap(aVoid -> presenter.getArticles())
+        presenter.getArticles()
                 .subscribe(articles -> {
-            displayArticles(articles);
-        });
+                    displayArticles(articles);
+                });
     }
 
     private void displayArticles(List<Children> articles) {
