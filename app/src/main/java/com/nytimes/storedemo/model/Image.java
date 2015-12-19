@@ -9,6 +9,5 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 public abstract class Image {
     public abstract String url();
-
     public abstract Optional<Boolean> isTopImage();
 }

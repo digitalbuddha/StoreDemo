@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
 import com.nytimes.storedemo.model.Article;
+import com.nytimes.storedemo.model.RedditData;
 import com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView;
 
 import java.util.List;
@@ -53,8 +55,13 @@ public class MainView extends CoordinatorLayout {
         });
     }
 
-    private void displayArticles(List<Article> articles) {
-        articleRecyclerView.setArticles(articles);
+    private void displayArticles(List<RedditData> articles) {
+
+
+
+        Log.e("############","THUG:");
+
+        //articleRecyclerView.setArticles(articles);
     }
 
     @Override

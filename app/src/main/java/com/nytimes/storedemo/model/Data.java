@@ -5,5 +5,6 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @Gson.TypeAdapters
-public abstract class Kind {
+public abstract class Data {
+    public abstract Children children();
 }
