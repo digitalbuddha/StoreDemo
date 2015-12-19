@@ -18,7 +18,7 @@ import rx.Observable;
  *                 get = cached data if not stale
  *                 network=skip get and disk
  */
-public abstract class Store<T> {
+public abstract class Store<T> implements RxStore<T> {
     //    private static final Logger LOGGER = LoggerFactory.getLogger(Store.class);
     private final MemoryCache<T> cache;
     protected final NetworkDAO<T> networkDAO;
@@ -33,10 +33,10 @@ public abstract class Store<T> {
      * @param id
      * @return an observable from the first data source that is available
      */
+    @Override
     public Observable<T> get(@NonNull final Id<T> id)  {
 //        LOGGER.info("Getting from Store");
-        return cache.get(id, network(id));
-
+        return cache.get(id, fresh(id));
     }
 
 
@@ -45,14 +45,15 @@ public abstract class Store<T> {
      * Will check to see if there exists an in flight observable and return it before
      * going to nerwork
      *
-     * @return data from network and store it in get and disk
+     * @return data from fresh and store it in get and disk
      */
-    public Observable<T> network(@NonNull final Id<T> id) {
+    @Override
+    public Observable<T> fresh(@NonNull final Id<T> id) {
         return getDataFromNetworkAndSave(id);
     }
 
     /**
-     * There should only be one network request in flight at any give time.
+     * There should only be one fresh request in flight at any give time.
      * <p>
      * Return cached request in the form of a Behavior Subject which will emit to its subscribers the
      * last value it gets. Subject/Observable is cached in a {@link ConcurrentMap} to maintain thread safety.
@@ -64,10 +65,9 @@ public abstract class Store<T> {
             return  getNetworkResponse(id);
     }
 
-    @NonNull
     protected Observable<T> getNetworkResponse(@NonNull final Id<T> id) {
         return getNetworkDAO().fetch(id)
-                .doOnNext(data -> {//LOGGER.info("Getting  from network updating get and disk");
+                .doOnNext(data -> {//LOGGER.info("Getting  from fresh updating get and disk");
                     //parse before save to disk to make sure no parsing errors
                     cache.update(id, data);
                 });

@@ -9,14 +9,14 @@ import java.util.Set;
  */
 public class StoreClerk {
 
-    private static final Set<Store> storeSet = Collections.synchronizedSet(new HashSet<Store>());
+    private static final Set<RxStore> storeSet = Collections.synchronizedSet(new HashSet<RxStore>());
 
     /**
      * Called by construct of {@link Store} to allow management by StoreClerk
      *
      * @param store
      */
-    public static <Raw, Parsed> void register(Store<Parsed> store) {
+    public static <Raw, Parsed> void register(RxStore<Parsed> store) {
         storeSet.add(store);
     }
 
