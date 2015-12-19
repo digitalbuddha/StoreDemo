@@ -9,10 +9,7 @@ import android.util.Log;
 import com.jakewharton.rxbinding.view.RxView;
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
-import com.nytimes.storedemo.model.Article;
 import com.nytimes.storedemo.model.Children;
-import com.nytimes.storedemo.model.PostNode;
-import com.nytimes.storedemo.model.RedditData;
 import com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView;
 
 import java.util.List;
@@ -58,12 +55,8 @@ public class MainView extends CoordinatorLayout {
     }
 
     private void displayArticles(List<Children> articles) {
-
-
-
         Log.e("############","THUG:");
-
-        //articleRecyclerView.setArticles(articles);
+        articleRecyclerView.setArticles(articles);
     }
 
     @Override
