@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nytimes.storedemo.model.GsonAdaptersModel;
 import com.nytimes.storedemo.rest.RedditApi;
-import com.nytimes.storedemo.util.MyApplicationUtils;
+import com.nytimes.storedemo.util.NetworkStatus;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -58,10 +58,10 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RequestInterceptor provideInteceptor() {
+    RequestInterceptor provideInteceptor(NetworkStatus network) {
         return request -> {
             request.addHeader("Accept", "application/json;versions=1");
-            if (MyApplicationUtils.isNetworkAvailable(context)) {
+            if (network.isOnGoodConnection()) {
                 int maxAge = 60; // read from cache for 1 minute
                 request.addHeader("Cache-Control", "public, max-age=" + maxAge);
             } else {
