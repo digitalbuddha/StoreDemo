@@ -2,7 +2,6 @@ package com.nytimes.storedemo.ui;
 
 import com.nytimes.storedemo.model.Children;
 import com.nytimes.storedemo.model.RedditData;
-
 import com.nytimes.storedemo.store.reddit.RedditStore;
 import com.nytimes.storedemo.util.Id;
 
@@ -18,7 +17,7 @@ import rx.schedulers.Schedulers;
  * Created by 206847 on 12/13/15.
  */
 public class MainPresenter implements Presenter<MainView> {
-    public static final String FAKE_PARAM = "fakeKey";
+    public static final String LIMIT = "20";
     @Inject
     RedditStore store;
     private MainView view;
@@ -39,7 +38,7 @@ public class MainPresenter implements Presenter<MainView> {
 
     public Observable<List<Children>> getPosts(){
         store.clearMemory();
-        return store.get(Id.of(RedditData.class, FAKE_PARAM))
+        return store.get(Id.of(RedditData.class, LIMIT))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(redditData -> redditData.data().children());

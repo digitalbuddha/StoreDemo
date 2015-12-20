@@ -21,11 +21,11 @@ public class RedditNetworkDao implements NetworkDAO<RedditData> {
 
     @Override
     public Observable<RedditData> fetch(Id<RedditData> id) {
-        return api.cached().aww();
+        return api.cached().aww(id.getKey());
     }
 
     @Override
     public Observable<RedditData> fresh(Id<RedditData> id) {
-        return api.fresh().aww();
+        return api.fresh().aww(id.getKey());
     }
 }
