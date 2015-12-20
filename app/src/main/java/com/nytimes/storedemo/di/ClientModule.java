@@ -25,7 +25,6 @@ public class ClientModule {
     @Singleton
     @Provides
     APIS<RedditApi> provideRedditApi(RestAdapter.Builder builder) {
-        // Create a Retrofit RestAdapter for our SodaService interface.
         RedditApi cacheApi = builder.setEndpoint("http://reddit.com")
                 .build().create(RedditApi.class);
 
