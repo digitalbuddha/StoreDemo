@@ -39,7 +39,7 @@ package com.nytimes.storedemo.model;
 
 import org.immutables.gson.Gson;
 ```
- Loads from network & disk have zero reflection and are blazing fast. Now that we have a Disk/Network layer, Why not put a Guava cache on top of this to cache inflated models in memory, the demo caches for 1 day. All of the above logic is abstracted into a reactive data store. UI doesn't need to worry about where data is coming from. UI can optionally bypass or clear memory cache. 
+ Loads from network & disk have zero reflection and are blazing fast. Now that we have a Disk/Network layer, Why not put a Guava cache on top of this to cache inflated models in memory, the demo caches for 1 day. All of the above logic is abstracted into a reactive data DAO. UI doesn't need to worry about where data is coming from. UI can optionally bypass or clear memory cache.
 
 
 Libraries used:
@@ -88,8 +88,8 @@ Next, create a subclass of Store which uses the DAO, dagger is recommended
 public class RedditStore extends Store<RedditData> {
 
     @Inject
-    public RedditStore(RedditNetworkDao networkDAO) {
-        super(networkDAO);
+    public RedditStore(RedditNetworkDao DAOLoader) {
+        super(DAOLoader);
     }
 }
 ```
