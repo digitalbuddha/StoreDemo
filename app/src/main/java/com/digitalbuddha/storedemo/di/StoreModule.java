@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.digitalbuddha.storedemo.di.anotation.CachedOKHTTP;
 import com.digitalbuddha.storedemo.di.anotation.ClientCache;
-import com.digitalbuddha.storedemo.di.anotation.FreshOKHTTP;
 import com.digitalbuddha.storedemo.di.anotation.ImageCache;
 import com.digitalbuddha.storedemo.util.NetworkStatus;
 import com.google.gson.Gson;
@@ -13,6 +12,8 @@ import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -40,18 +41,7 @@ public class StoreModule {
         return context;
     }
 
-    @Singleton
-    @Provides
-    @FreshOKHTTP
-    OkHttpClient provideFreshClient(@ClientCache File cacheDir, @FreshOKHTTP Interceptor interceptor) {
 
-        Cache cache = new Cache(cacheDir, 20 * 1024 * 1024);
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setCache(cache);
-        okHttpClient.interceptors().add(interceptor);
-        okHttpClient.networkInterceptors().add(interceptor);
-        return okHttpClient;
-    }
     @Singleton
     @Provides
     @CachedOKHTTP
@@ -85,24 +75,6 @@ public class StoreModule {
 
     @Singleton
     @Provides
-    @FreshOKHTTP
-    Interceptor provideFreshInteceptor() {
-        return chain -> {
-            Request originalRequest = chain.request();
-            String cacheHeaderValue = "public, no-cache";
-            Request request = originalRequest.newBuilder().build();
-
-            Response response = chain.proceed(request);
-            return response.newBuilder()
-                    .removeHeader("Pragma")
-                    .removeHeader("Cache-Control")
-                    .header("Cache-Control", cacheHeaderValue)
-                    .build();
-        };
-    }
-
-    @Singleton
-    @Provides
     @ClientCache
     File provideCacheFile(Application context) {
         return new File(context.getCacheDir(), "cache_file");
@@ -124,5 +96,14 @@ public class StoreModule {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(cachedClient)
                 .baseUrl("http://reddit.com/");
+    }
+
+    @Singleton
+    @Provides
+    Picasso providePicasso(@ImageCache File imageCache, Application context) {
+        long CACHE_SIZE = 1024 * 1024 * 100; // 75MB
+        Picasso.Builder builder = new Picasso.Builder(context);
+        builder.downloader(new OkHttpDownloader(imageCache, CACHE_SIZE));
+        return builder.build();
     }
 }
