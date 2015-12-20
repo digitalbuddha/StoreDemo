@@ -50,3 +50,69 @@ RxJava & Dagger to bring it all home
 
 Dagger is used in demo project but not required. 
 
+
+Creating a new Store:
+
+First, create an implementation of NetworkDAO such as:
+```
+public class RedditNetworkDao implements NetworkDAO<RedditData> {
+    @Inject
+    RedditApi api;
+
+
+    @Inject
+    public RedditNetworkDao() {
+    }
+
+    @Override
+    //will eventually go to retrofit & okhttp cache
+    public Observable<RedditData> fetch(Id<RedditData> id) {
+        return api.aww();
+    }
+}
+```
+
+RedditApi is implemented by retrofit from an interface
+```
+public interface RedditApi {
+    @GET("/r/aww/.json?limit=20")
+    Observable<RedditData> aww();
+}
+```
+
+
+
+Next, create a subclass of Store which uses the DAO, dagger is recommended
+```
+@Singleton
+public class RedditStore extends Store<RedditData> {
+
+    @Inject
+    public RedditStore(RedditNetworkDao networkDAO) {
+        super(networkDAO);
+    }
+}
+```
+
+Now you have a fully functional disk, network and memory cache to use from the ui:
+```
+
+redditStore.clearMemory();
+redditStore.get(Id.of(RedditData.class, PAGE_PARAM))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(redditData -> redditData.data().children());
+//skip memory
+redditStore.clearMemory();
+redditStore.get(Id.of(RedditData.class, PAGE_PARAM))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(redditData -> redditData.data().children());
+//force network hit
+redditStore.fresh(Id.of(RedditData.class, PAGE_PARAM))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(redditData -> redditData.data().children());
+
+```
+
