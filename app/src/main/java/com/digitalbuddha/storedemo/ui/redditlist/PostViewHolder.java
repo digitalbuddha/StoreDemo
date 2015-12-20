@@ -3,7 +3,6 @@ package com.digitalbuddha.storedemo.ui.redditlist;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.digitalbuddha.storedemo.DemoApplication;
+import com.digitalbuddha.storedemo.di.anotation.PaletteCache;
 import com.digitalbuddha.storedemo.model.Children;
 import com.digitalbuddha.storedemo.model.Image;
 import com.digitalbuddha.storedemo.util.DeviceUtils;
 import com.nytimes.storedemo.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -28,6 +30,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     @Inject
     protected DeviceUtils deviceUtils;
+    @Inject
+    @PaletteCache
+    protected Map<String,Palette.Swatch> swatchCache;
+
     private int maxHeight, margin, maxWidth;
     private TextView title;
     private ImageView thumbnail;
@@ -60,9 +66,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void onBind(Children article) {
         title.setText(article.data().title());
-        itemView.setBackground(new ColorDrawable(Color.WHITE));
+        reset();
 
         Image image = article.data().preview().images().get(0).source();
+        final String url = image.url();
+        setColor(swatchCache.get(url));
+
         BitmapTransform bitmapTransform = new BitmapTransform(maxWidth, maxHeight, image);
 
         int targetWidth = bitmapTransform.targetWidth;
@@ -92,17 +101,41 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onSuccess()
                     {
-                        handleSuccess();
+                        if(swatchCache.get(url) == null)
+                            handleSuccess(url);
                     }
                     @Override
                     public void onError()
-                    {itemView.setBackground(new ColorDrawable(Color.WHITE));}
+                    {reset();}
                 });
     }
 
-    private void handleSuccess() {
+    private void handleSuccess(String key) {
 
-        new AsyncTask<BitmapDrawable, Integer, Palette>(){
+        Bitmap bitmap = ((BitmapDrawable) thumbnail.getDrawable()).getBitmap();
+        new Palette.Builder(bitmap).generate(palette -> {
+            Palette.Swatch swatch = palette.getLightVibrantSwatch();
+            if(swatch == null) {
+                swatch = palette.getVibrantSwatch();
+            } else if(swatch == null) {
+                swatch = palette.getMutedSwatch();
+            } else if(swatch == null) {
+                swatch = palette.getDarkVibrantSwatch();
+            } else if(swatch == null) {
+                swatch = palette.getDarkMutedSwatch();
+            } else if(swatch == null) {
+                swatch = palette.getLightMutedSwatch();
+            }
+            if(swatch!=null)
+            {
+                setColor(swatch);
+                swatchCache.put(key, swatch);
+            } else  {
+                reset();
+            }
+        });
+
+        /*new AsyncTask<BitmapDrawable, Integer, Palette>(){
             @Override
             protected Palette doInBackground(BitmapDrawable... params)
             {
@@ -124,17 +157,29 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     swatch = palette.getDarkVibrantSwatch();
                 } else if(swatch == null) {
                     swatch = palette.getDarkMutedSwatch();
+                } else if(swatch == null) {
+                    swatch = palette.getLightMutedSwatch();
                 }
                 if(swatch!=null)
                 {
-                    title.setTextColor(swatch.getTitleTextColor());
-                    title.setBackgroundColor(swatch.getRgb());
-                    itemView.setBackground(new ColorDrawable(swatch.getRgb()));
+                    setColor(swatch);
                 } else  {
-                    itemView.setBackground(new ColorDrawable(Color.WHITE));
+                    reset();
                 }
             }
-        }.execute((BitmapDrawable) thumbnail.getDrawable());
+        }.execute((BitmapDrawable) thumbnail.getDrawable());*/
+    }
+
+    private void setColor(Palette.Swatch swatch) {
+        if(swatch == null)
+            return;
+        title.setTextColor(swatch.getTitleTextColor());
+        itemView.setBackgroundColor(swatch.getRgb());
+    }
+
+    private void reset() {
+        title.setTextColor(Color.BLACK);
+        itemView.setBackgroundColor(Color.WHITE);
     }
 
 }

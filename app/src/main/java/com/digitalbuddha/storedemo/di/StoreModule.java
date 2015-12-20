@@ -1,8 +1,10 @@
 package com.digitalbuddha.storedemo.di;
 
 import android.app.Application;
+import android.support.v7.graphics.Palette;
 
 import com.digitalbuddha.storedemo.di.anotation.ClientCache;
+import com.digitalbuddha.storedemo.di.anotation.PaletteCache;
 import com.digitalbuddha.storedemo.util.NetworkStatus;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;
@@ -14,6 +16,8 @@ import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -93,4 +97,18 @@ public class StoreModule {
         builder.downloader(new OkHttpDownloader(client));
         return builder.build();
     }
+
+    @Singleton
+    @Provides
+    @PaletteCache
+    Map<String, Palette.Swatch> providePaletteMap() {
+        int maxSize = 50;
+        return new LinkedHashMap<String, Palette.Swatch>(maxSize*4/3, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String,Palette.Swatch> eldest) {
+                return size() > maxSize;
+            }
+        };
+    }
+
 }

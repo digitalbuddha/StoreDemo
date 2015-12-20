@@ -7,9 +7,10 @@ import javax.inject.Qualifier;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by brianplummer on 12/19/15.
+ * Created by brianplummer on 12/20/15.
  */
 @Qualifier
 @Retention(RUNTIME)
-public @interface ImageCache {
+public @interface PaletteCache
+{
 }
