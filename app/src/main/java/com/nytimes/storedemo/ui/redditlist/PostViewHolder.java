@@ -52,7 +52,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         int targetWidth = bitmapTransform.targetWidth;
         int targetHeight = bitmapTransform.targetHeight;
 
-        if (targetWidth > targetHeight) {
+        if (targetWidth >= targetHeight) {
             topSpacer.setVisibility(View.GONE);
         } else {
             topSpacer.setVisibility(View.VISIBLE);
