@@ -10,4 +10,5 @@ import org.immutables.value.Value;
 public abstract class PostData {
     public abstract String title();
     public abstract String thumbnail();
+    public abstract Preview preview();
 }

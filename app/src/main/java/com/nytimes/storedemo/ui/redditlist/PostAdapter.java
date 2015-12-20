@@ -16,7 +16,7 @@ import javax.inject.Inject;
 /**
  * Created by brianplummer on 12/16/15.
  */
-public class PostAdapter extends RecyclerView.Adapter<PostVIewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostViewHolderRename> {
 
     private List<Children> articles = new ArrayList<>();
 
@@ -24,14 +24,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostVIewHolder> {
     public PostAdapter() {}
 
     @Override
-    public PostVIewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostViewHolderRename onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(
                 parent.getContext()).inflate(R.layout.article_item, parent, false);
-        return new PostVIewHolder(itemView);
+        return new PostViewHolderRename(itemView);
     }
 
     @Override
-    public void onBindViewHolder(PostVIewHolder holder, int position) {
+    public void onBindViewHolder(PostViewHolderRename holder, int position) {
         holder.onBind(articles.get(position));
     }
 

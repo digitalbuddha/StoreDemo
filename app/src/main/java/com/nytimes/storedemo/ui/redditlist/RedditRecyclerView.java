@@ -41,7 +41,7 @@ public class RedditRecyclerView extends RecyclerView {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         setLayoutManager(layoutManager);
-        addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+        //addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         setAdapter(postAdapter);
     }
 
