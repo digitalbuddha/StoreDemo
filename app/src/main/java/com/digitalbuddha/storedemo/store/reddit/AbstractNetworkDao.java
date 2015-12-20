@@ -1,6 +1,5 @@
 package com.digitalbuddha.storedemo.store.reddit;
 
-import com.digitalbuddha.storedemo.di.anotation.CachedOKHTTP;
 import com.digitalbuddha.storedemo.store.base.NetworkDAO;
 import com.digitalbuddha.storedemo.util.Id;
 import com.squareup.okhttp.OkHttpClient;
@@ -14,7 +13,6 @@ import rx.Observable;
 
 public abstract class AbstractNetworkDao<T> implements NetworkDAO<T> {
     @Inject
-    @CachedOKHTTP
     OkHttpClient client;
 
     protected void removeFromCache(Id<T> id) {

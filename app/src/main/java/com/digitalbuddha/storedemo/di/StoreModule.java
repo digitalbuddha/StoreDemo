@@ -2,9 +2,7 @@ package com.digitalbuddha.storedemo.di;
 
 import android.app.Application;
 
-import com.digitalbuddha.storedemo.di.anotation.CachedOKHTTP;
 import com.digitalbuddha.storedemo.di.anotation.ClientCache;
-import com.digitalbuddha.storedemo.di.anotation.ImageCache;
 import com.digitalbuddha.storedemo.util.NetworkStatus;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;
@@ -44,8 +42,7 @@ public class StoreModule {
 
     @Singleton
     @Provides
-    @CachedOKHTTP
-    OkHttpClient provideCachedClient(@ClientCache File cacheDir, @CachedOKHTTP Interceptor interceptor) {
+    OkHttpClient provideCachedClient(@ClientCache File cacheDir,Interceptor interceptor) {
 
         Cache cache = new Cache(cacheDir, 20 * 1024 * 1024);
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -56,7 +53,6 @@ public class StoreModule {
     }
     @Singleton
     @Provides
-    @CachedOKHTTP
     Interceptor provideCachedInteceptor(NetworkStatus networkStatus) {
         return chain -> {
             Request originalRequest = chain.request();
@@ -82,15 +78,7 @@ public class StoreModule {
 
     @Singleton
     @Provides
-    @ImageCache
-    File provideImageCacheFile() {
-        return new File(context.getCacheDir(), "image_cache_file");
-    }
-
-
-    @Singleton
-    @Provides
-    Retrofit.Builder provideRestAdapterBuilder(Gson gson, @CachedOKHTTP OkHttpClient cachedClient) {
+    Retrofit.Builder provideRestAdapterBuilder(Gson gson, OkHttpClient cachedClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -100,10 +88,9 @@ public class StoreModule {
 
     @Singleton
     @Provides
-    Picasso providePicasso(@ImageCache File imageCache, Application context) {
-        long CACHE_SIZE = 1024 * 1024 * 100; // 75MB
+    Picasso providePicasso(OkHttpClient client, Application context) {
         Picasso.Builder builder = new Picasso.Builder(context);
-        builder.downloader(new OkHttpDownloader(imageCache, CACHE_SIZE));
+        builder.downloader(new OkHttpDownloader(client));
         return builder.build();
     }
 }

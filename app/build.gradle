@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 android {
+    lintOptions {
+        abortOnError false
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     compileOptions {
