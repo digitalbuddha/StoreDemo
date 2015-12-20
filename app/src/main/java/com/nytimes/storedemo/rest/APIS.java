@@ -1,7 +1,8 @@
 package com.nytimes.storedemo.rest;
 
 /**
- * Created by 206847 on 12/19/15.
+ * wrapper class for holding both a cached and non cached version of api
+ * api differences come from request interceptor
  */
 public class APIS<T> {
 
