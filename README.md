@@ -96,8 +96,7 @@ public class RedditStore extends Store<RedditData> {
 
 Now you have a fully functional disk, network and memory cache to use from the ui:
 ```
-
-redditStore.clearMemory();
+//gets memory if not stale, then disk, then network
 redditStore.get(Id.of(RedditData.class, PAGE_PARAM))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +107,7 @@ redditStore.get(Id.of(RedditData.class, PAGE_PARAM))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(redditData -> redditData.data().children());
-//force network hit
+//skip memory and disk, force network hit
 redditStore.fresh(Id.of(RedditData.class, PAGE_PARAM))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
