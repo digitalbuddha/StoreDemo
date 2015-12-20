@@ -21,7 +21,7 @@ public class BitmapTransform implements Transformation
         this.key = image;
 
         double aspectRatio;
-        if (image.width() > image.height()) {
+        if (image.width() >= image.height()) {
             targetWidth = maxWidth;
             aspectRatio = (double) image.height() / (double) image.width();
             targetHeight = (int) (targetWidth * aspectRatio);
