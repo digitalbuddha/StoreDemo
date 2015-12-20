@@ -2,7 +2,7 @@ package com.nytimes.storedemo.di;
 
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.ui.MainView;
-import com.nytimes.storedemo.ui.redditlist.PostViewHolderRename;
+import com.nytimes.storedemo.ui.redditlist.PostViewHolder;
 import com.nytimes.storedemo.ui.redditlist.RedditRecyclerView;
 
 import javax.inject.Singleton;
@@ -21,5 +21,5 @@ public interface AppComponent {
     void inject(MainView a);
     void inject(RedditRecyclerView a);
     void inject(DemoApplication demoApplication);
-    void inject(PostViewHolderRename postViewHolder);
+    void inject(PostViewHolder postViewHolder);
 }

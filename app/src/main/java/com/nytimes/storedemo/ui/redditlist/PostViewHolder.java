@@ -17,7 +17,7 @@ import javax.inject.Inject;
 /**
  * Created by brianplummer on 12/16/15.
  */
-public class PostViewHolderRename extends RecyclerView.ViewHolder {
+public class PostViewHolder extends RecyclerView.ViewHolder {
 
     @Inject
     protected DeviceUtils deviceUtils;
@@ -26,7 +26,7 @@ public class PostViewHolderRename extends RecyclerView.ViewHolder {
     private ImageView thumbnail;
     private View topSpacer;
 
-    public PostViewHolderRename(View itemView) {
+    public PostViewHolder(View itemView) {
         super(itemView);
         int screenWidth, screenHeight;
         ((DemoApplication)itemView.getContext()
