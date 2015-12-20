@@ -2,12 +2,12 @@ package com.nytimes.storedemo.model;
 
 import org.immutables.value.Value;
 
+import java.util.List;
+
 /**
  * Created by brianplummer on 12/19/15.
  */
 @Value.Immutable
-public abstract class Image {
-    public abstract String url();
-    public abstract int height();
-    public abstract int width();
+public abstract class Preview {
+    public abstract List<Images> images();
 }
