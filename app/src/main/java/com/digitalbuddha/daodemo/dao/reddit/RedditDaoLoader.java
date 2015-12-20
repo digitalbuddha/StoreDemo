@@ -1,6 +1,6 @@
 package com.digitalbuddha.daodemo.dao.reddit;
 
-import com.digitalbuddha.daodemo.dao.base.DAOLoader;
+import com.digitalbuddha.daodemo.dao.base.BaseDAOLoader;
 import com.digitalbuddha.daodemo.model.RedditData;
 import com.digitalbuddha.daodemo.rest.RedditApi;
 import com.digitalbuddha.daodemo.util.Id;
@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-public class RedditDaoLoader extends DAOLoader<RedditData> {
+public class RedditDaoLoader extends BaseDAOLoader<RedditData> {
     @Inject
     RedditApi api;
 

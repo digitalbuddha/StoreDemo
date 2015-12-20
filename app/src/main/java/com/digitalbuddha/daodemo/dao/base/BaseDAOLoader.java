@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-public abstract class DAOLoader<T> implements DAOLoaderInterface<T> {
+public abstract class BaseDAOLoader<T> implements DAOLoaderInterface<T> {
     @Inject
     OkHttpClient client;
 

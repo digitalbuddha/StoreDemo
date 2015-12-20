@@ -1,4 +1,4 @@
-package com.digitalbuddha.daodemo.di.anotation;
+package com.digitalbuddha.daodemo.dao.base.di.anotation;
 
 import java.lang.annotation.Retention;
 
@@ -11,5 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Qualifier
 @Retention(RUNTIME)
-public @interface ImageCache {
+public @interface ClientCache {
 }

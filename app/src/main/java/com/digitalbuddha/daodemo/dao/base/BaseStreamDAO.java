@@ -13,11 +13,11 @@ import rx.subjects.BehaviorSubject;
  * @param <Parsed> data type after parsing
  *
  */
-public abstract class StreamDAO< Parsed> extends DAO< Parsed> {
+public abstract class BaseStreamDAO< Parsed> extends BaseDAO< Parsed> {
 
     private final BehaviorSubject<Parsed> subject;
 
-    public StreamDAO(DAOLoaderInterface<Parsed> DAOLoader) {
+    public BaseStreamDAO(DAOLoaderInterface<Parsed> DAOLoader) {
         super(DAOLoader);
         subject = BehaviorSubject.create();
     }

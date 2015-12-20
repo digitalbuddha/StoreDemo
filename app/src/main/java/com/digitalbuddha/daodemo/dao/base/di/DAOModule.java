@@ -1,8 +1,8 @@
-package com.digitalbuddha.daodemo.di;
+package com.digitalbuddha.daodemo.dao.base.di;
 
 import android.app.Application;
 
-import com.digitalbuddha.daodemo.di.anotation.ClientCache;
+import com.digitalbuddha.daodemo.dao.base.di.anotation.ClientCache;
 import com.digitalbuddha.daodemo.util.NetworkStatus;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;

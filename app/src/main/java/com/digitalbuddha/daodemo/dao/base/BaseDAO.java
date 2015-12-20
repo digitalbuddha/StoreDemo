@@ -7,19 +7,19 @@ import com.digitalbuddha.daodemo.util.Id;
 import rx.Observable;
 
 /**
- * DAO to be used for loading an object different data sources
+ * BaseDAO to be used for loading an object different data sources
  *
  * @param <T> data type after parsing
  *                 <p>
  *                 get = cached data if not stale otherwise network, updates caches
  *                 network=skip memory and disk cache, still updates caches
  */
-public abstract class DAO<T> implements RxDAO<T> {
+public abstract class BaseDAO<T> implements RxDAO<T> {
     private final DAOCache<T> cache;
     protected final DAOLoaderInterface<T> DAOLoader;
 
 
-    public DAO(DAOLoaderInterface<T> DAOLoader) {
+    public BaseDAO(DAOLoaderInterface<T> DAOLoader) {
         cache = DAOCache.create();
         this.DAOLoader = DAOLoader;
     }

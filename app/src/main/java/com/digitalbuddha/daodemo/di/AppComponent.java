@@ -1,5 +1,6 @@
 package com.digitalbuddha.daodemo.di;
 
+import com.digitalbuddha.daodemo.dao.base.di.DAOModule;
 import com.digitalbuddha.daodemo.ui.MainView;
 import com.digitalbuddha.daodemo.ui.redditlist.PostViewHolder;
 import com.digitalbuddha.daodemo.DemoApplication;

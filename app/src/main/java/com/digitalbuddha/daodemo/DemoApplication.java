@@ -1,7 +1,7 @@
 package com.digitalbuddha.daodemo;
 
 import com.digitalbuddha.daodemo.di.AppComponent;
-import com.digitalbuddha.daodemo.di.DAOModule;
+import com.digitalbuddha.daodemo.dao.base.di.DAOModule;
 import com.digitalbuddha.daodemo.di.DaggerAppComponent;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.picasso.Picasso;
