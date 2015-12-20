@@ -17,7 +17,6 @@ import dagger.Component;
         modules = {ClientModule.class,StoreModule.class}
 )
 public interface AppComponent {
-
     void inject(MainView a);
     void inject(RedditRecyclerView a);
     void inject(DemoApplication demoApplication);

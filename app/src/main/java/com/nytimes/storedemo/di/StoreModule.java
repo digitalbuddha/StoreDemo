@@ -8,12 +8,12 @@ import com.nytimes.storedemo.di.anotation.ImageCache;
 import com.nytimes.storedemo.util.NetworkStatus;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
 
 import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -72,7 +72,8 @@ public class StoreModule {
                 int maxAge = 60; // read from cache for 1 minute
                 request.addHeader("Cache-Control", "public, max-age=" + maxAge);
             } else {
-                int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
+                // tolerate 4-weeks stale
+                long maxStale = TimeUnit.SECONDS.convert(28, TimeUnit.DAYS);
                 request.addHeader("Cache-Control",
                         "public, only-if-cached, max-stale=" + maxStale);
             }
