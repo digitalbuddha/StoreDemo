@@ -33,7 +33,6 @@ public class BitmapTransform implements Transformation
 
     @Override
     public Bitmap transform(Bitmap source) {
-
         Bitmap result = Bitmap.createScaledBitmap(source, targetWidth,
                 targetHeight, false);
         if (result != source) {

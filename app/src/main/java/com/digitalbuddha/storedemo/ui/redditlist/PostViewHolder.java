@@ -38,6 +38,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         topSpacer = itemView.findViewById(R.id.topSpacer);
         screenWidth = deviceUtils.getScreenWidth();
         screenHeight = deviceUtils.getScreenHeight();
+
+        if (screenWidth > screenHeight) {
+            screenHeight = deviceUtils.getScreenWidth();
+            screenWidth = deviceUtils.getScreenHeight();
+        }
+
         maxHeight = (int) (screenHeight * .55f);
         margin = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.post_horizontal_margin);
         maxWidth = screenWidth - (2 * margin);
