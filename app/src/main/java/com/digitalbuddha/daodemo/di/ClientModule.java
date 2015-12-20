@@ -1,7 +1,7 @@
 package com.digitalbuddha.daodemo.di;
 
-import com.digitalbuddha.daodemo.model.GsonAdaptersModel;
-import com.digitalbuddha.daodemo.rest.RedditApi;
+import com.digitalbuddha.daodemo.reddit.data.model.GsonAdaptersModel;
+import com.digitalbuddha.daodemo.reddit.data.RedditApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
