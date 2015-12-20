@@ -27,7 +27,6 @@ public class DemoApplication extends android.app.Application {
                 .build();
 
         component.inject(this);
-
         configurePIcasso();
     }
 
@@ -36,6 +35,7 @@ public class DemoApplication extends android.app.Application {
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(imageCache, CACHE_SIZE));
         Picasso built = builder.build();
+        //MIKE: keep these lines please sir
         //built.setIndicatorsEnabled(true);
         //built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);

@@ -6,9 +6,15 @@ import android.util.AttributeSet;
 
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
+import com.nytimes.storedemo.model.Children;
 import com.nytimes.storedemo.ui.redditlist.RedditRecyclerView;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 /**
  * TODO: document your custom view class.
@@ -40,7 +46,19 @@ public class MainView extends CoordinatorLayout {
         redditRecyclerView = (RedditRecyclerView) findViewById(R.id.postRecyclerView);
 
         presenter.getPosts()
-                .subscribe(redditRecyclerView::setArticles);
+                .subscribe(children -> {
+                    loadPosts(children);
+                });
+    }
+
+    private void loadPosts(List<Children> posts) {
+        // prefetch images....
+        for(Children child : posts) {
+            Picasso.with(getContext())
+                    .load(child.data().preview().images().get(0).source().url())
+                    .fetch();
+        }
+        redditRecyclerView.setArticles(posts);
     }
 
     @Override

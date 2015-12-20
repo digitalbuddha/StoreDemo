@@ -7,6 +7,6 @@ import retrofit.http.Query;
 import rx.Observable;
 
 public interface RedditApi {
-    @GET("/r/aww/.json")
+    @GET("/r/aww/new/.json")
     Observable<RedditData> aww(@Query("limit") String limit);
 }
