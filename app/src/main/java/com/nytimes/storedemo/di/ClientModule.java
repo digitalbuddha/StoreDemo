@@ -5,12 +5,15 @@ import com.google.gson.GsonBuilder;
 import com.nytimes.storedemo.model.GsonAdaptersModel;
 import com.nytimes.storedemo.rest.APIS;
 import com.nytimes.storedemo.rest.RedditApi;
+import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 
 @Module
 public class ClientModule {
@@ -24,16 +27,24 @@ public class ClientModule {
 
     @Singleton
     @Provides
-    APIS<RedditApi> provideRedditApi(RestAdapter.Builder builder) {
-        RedditApi cacheApi = builder.setEndpoint("http://reddit.com")
-                .build().create(RedditApi.class);
+    APIS<RedditApi> provideRedditApi(OkHttpClient client, Gson gson) {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl("http://reddit.com/");
 
-        RedditApi freshApi = builder.setEndpoint("http://reddit.com")
-                .setRequestInterceptor(request -> {
-                })//clear out the inteceptor
-                .build().create(RedditApi.class);
+        Retrofit retrofit = builder
+                .client(client)
+                .build();
+        RedditApi cacheApi = retrofit.create(RedditApi.class);
 
-     return new APIS<>(cacheApi, freshApi);
+        RedditApi freshApi = builder
+                .client(new OkHttpClient())//no cache
+                .build()
+                .create(RedditApi.class);
+
+
+        return new APIS<>(cacheApi, freshApi);
 
     }
 }

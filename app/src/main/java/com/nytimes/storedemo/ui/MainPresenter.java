@@ -20,6 +20,7 @@ public class MainPresenter implements Presenter<MainView> {
     public static final String LIMIT = "20";
     @Inject
     RedditStore store;
+
     private MainView view;
 
     @Inject

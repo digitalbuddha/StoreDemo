@@ -2,27 +2,21 @@ package com.nytimes.storedemo.di;
 
 import android.app.Application;
 
-import com.google.gson.Gson;
 import com.nytimes.storedemo.di.anotation.ClientCache;
 import com.nytimes.storedemo.di.anotation.ImageCache;
 import com.nytimes.storedemo.util.NetworkStatus;
 import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import java.io.File;
-import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
 
 @Module
 public class StoreModule {
@@ -42,52 +36,61 @@ public class StoreModule {
 
     @Singleton
     @Provides
-    OkHttpClient provideClient(@ClientCache File cacheDir) {
-        long CACHE_SIZE = 1024 * 1024 * 75; // 75MB
+    OkHttpClient provideClient(@ClientCache File cacheDir, Interceptor interceptor) {
+
+        Cache cache = new Cache(cacheDir, 20 * 1024 * 1024);
         OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setCache(new Cache(cacheDir, CACHE_SIZE));
+        okHttpClient.setCache(cache);
+        okHttpClient.interceptors().add(interceptor);
+        okHttpClient.networkInterceptors().add(interceptor);
         return okHttpClient;
     }
 
     @Singleton
     @Provides
+    Interceptor provideInteceptor(NetworkStatus networkStatus) {
+        return chain -> {
+            Request originalRequest = chain.request();
+            String cacheHeaderValue = networkStatus.isOnGoodConnection()
+                    ? "public, max-age=2419200"
+                    : "public, only-if-cached, max-stale=2419200";
+            Request request = originalRequest.newBuilder().build();
+            Response response = chain.proceed(request);
+            return response.newBuilder()
+                    .removeHeader("Pragma")
+                    .removeHeader("Cache-Control")
+                    .header("Cache-Control", cacheHeaderValue)
+                    .build();
+        };
+    }
+
+    @Singleton
+    @Provides
     @ClientCache
-    File provideCacheFile() {
-        return new File(System.getProperty("java.io.tmpdir"), UUID.randomUUID().toString());
+    File provideCacheFile(Application context) {
+        return new File(context.getCacheDir(), "cache_file");
     }
 
     @Singleton
     @Provides
     @ImageCache
     File provideImageCacheFile() {
-        return new File(System.getProperty("java.io.tmpdir"), UUID.randomUUID().toString());
+        return new File(context.getCacheDir(), "image_cache_file");
     }
 
-    @Singleton
-    @Provides
-    RequestInterceptor provideInteceptor(NetworkStatus network) {
-        return request -> {
-            request.addHeader("Accept", "application/json;versions=1");
-            if (network.isOnGoodConnection()) {
-                int maxAge = 60; // read from cache for 1 minute
-                request.addHeader("Cache-Control", "public, max-age=" + maxAge);
-            } else {
-                // tolerate 4-weeks stale
-                long maxStale = TimeUnit.SECONDS.convert(28, TimeUnit.DAYS);
-                request.addHeader("Cache-Control",
-                        "public, only-if-cached, max-stale=" + maxStale);
-            }
-        };
-    }
-
-    @Singleton
-    @Provides
-    RestAdapter.Builder provideRestAdapterBuilder(OkHttpClient client, Gson gson, RequestInterceptor interceptor) {
-        Executor executor = Executors.newCachedThreadPool();
-        return new RestAdapter.Builder()
-                .setExecutors(executor, executor)
-                .setClient(new OkClient(client))
-                .setConverter(new GsonConverter(gson))
-                .setRequestInterceptor(interceptor);
-    }
+//
+//    @Singleton
+//    @Provides
+//    RestAdapter.Builder provideRestAdapterBuilder(OkHttpClient client, Gson gson) {
+//        Executor executor = Executors.newCachedThreadPool();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://api.nuuneoi.com/base/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        return new Retrofit().Builder()
+//                .setExecutors(executor, executor)
+//                .setClient(new OkClient(client))
+//                .setConverter(new GsonConverter(gson));
+//    }
 }
