@@ -6,10 +6,7 @@ import android.util.AttributeSet;
 
 import com.nytimes.storedemo.DemoApplication;
 import com.nytimes.storedemo.R;
-import com.nytimes.storedemo.model.Children;
-import com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView;
-
-import java.util.List;
+import com.nytimes.storedemo.ui.redditlist.RedditRecyclerView;
 
 import javax.inject.Inject;
 
@@ -20,7 +17,7 @@ public class MainView extends CoordinatorLayout {
     @Inject
     MainPresenter presenter;
 
-    ArticleRecyclerView articleRecyclerView;
+    RedditRecyclerView redditRecyclerView;
 
     public MainView(Context context) {
         this(context, null);
@@ -40,16 +37,10 @@ public class MainView extends CoordinatorLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         presenter.bind(this);
-        articleRecyclerView = (ArticleRecyclerView) findViewById(R.id.articleRecyclerView);
+        redditRecyclerView = (RedditRecyclerView) findViewById(R.id.postRecyclerView);
 
-        presenter.getArticles()
-                .subscribe(articles -> {
-                    displayArticles(articles);
-                });
-    }
-
-    private void displayArticles(List<Children> articles) {
-        articleRecyclerView.setArticles(articles);
+        presenter.getPosts()
+                .subscribe(redditRecyclerView::setArticles);
     }
 
     @Override

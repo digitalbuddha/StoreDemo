@@ -1,6 +1,7 @@
-package com.nytimes.storedemo.store.article;
+package com.nytimes.storedemo.store.reddit;
 
 import com.nytimes.storedemo.model.RedditData;
+import com.nytimes.storedemo.rest.APIS;
 import com.nytimes.storedemo.rest.RedditApi;
 import com.nytimes.storedemo.store.base.NetworkDAO;
 import com.nytimes.storedemo.util.Id;
@@ -11,7 +12,7 @@ import rx.Observable;
 
 public class RedditNetworkDao implements NetworkDAO<RedditData> {
     @Inject
-    RedditApi api;
+    APIS<RedditApi> api;
 
 
     @Inject
@@ -19,8 +20,12 @@ public class RedditNetworkDao implements NetworkDAO<RedditData> {
     }
 
     @Override
-    //will eventually go to retrofit & okhttp cache
     public Observable<RedditData> fetch(Id<RedditData> id) {
-        return api.aww();
+        return api.cached().aww();
+    }
+
+    @Override
+    public Observable<RedditData> fresh(Id<RedditData> id) {
+        return api.fresh().aww();
     }
 }

@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.ui.articlelist;
+package com.nytimes.storedemo.ui.redditlist;
 
 import android.content.Context;
 import android.content.res.TypedArray;

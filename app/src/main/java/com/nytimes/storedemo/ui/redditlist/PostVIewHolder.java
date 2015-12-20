@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.ui.articlelist;
+package com.nytimes.storedemo.ui.redditlist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,12 +12,12 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by brianplummer on 12/16/15.
  */
-public class ArticleViewHolder extends RecyclerView.ViewHolder {
+public class PostVIewHolder extends RecyclerView.ViewHolder {
 
     private TextView title;
     private ImageView thumbnail;
 
-    public ArticleViewHolder(View itemView) {
+    public PostVIewHolder(View itemView) {
         super(itemView);
         title = (TextView) itemView.findViewById(R.id.title);
         thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);

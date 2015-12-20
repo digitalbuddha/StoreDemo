@@ -3,7 +3,7 @@ package com.nytimes.storedemo.ui;
 import com.nytimes.storedemo.model.Children;
 import com.nytimes.storedemo.model.RedditData;
 
-import com.nytimes.storedemo.store.article.RedditStore;
+import com.nytimes.storedemo.store.reddit.RedditStore;
 import com.nytimes.storedemo.util.Id;
 
 import java.util.List;
@@ -37,7 +37,8 @@ public class MainPresenter implements Presenter<MainView> {
         view = null;
     }
 
-    public Observable<List<Children>> getArticles(){
+    public Observable<List<Children>> getPosts(){
+        store.clearMemory();
         return store.get(Id.of(RedditData.class, FAKE_PARAM))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

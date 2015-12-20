@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.ui.articlelist;
+package com.nytimes.storedemo.ui.redditlist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,22 +16,22 @@ import javax.inject.Inject;
 /**
  * Created by brianplummer on 12/16/15.
  */
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostVIewHolder> {
 
     private List<Children> articles = new ArrayList<>();
 
     @Inject
-    public ArticleAdapter () {}
+    public PostAdapter() {}
 
     @Override
-    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostVIewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(
                 parent.getContext()).inflate(R.layout.article_item, parent, false);
-        return new ArticleViewHolder(itemView);
+        return new PostVIewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ArticleViewHolder holder, int position) {
+    public void onBindViewHolder(PostVIewHolder holder, int position) {
         holder.onBind(articles.get(position));
     }
 

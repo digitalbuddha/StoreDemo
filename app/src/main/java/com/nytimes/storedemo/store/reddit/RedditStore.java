@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.store.article;
+package com.nytimes.storedemo.store.reddit;
 
 
 import com.nytimes.storedemo.model.RedditData;

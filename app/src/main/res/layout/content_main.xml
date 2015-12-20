@@ -9,8 +9,8 @@
     tools:showIn="@layout/activity_main"
     tools:context=".MainActivity">
 
-    <com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView
-        android:id="@+id/articleRecyclerView"
+    <com.nytimes.storedemo.ui.redditlist.RedditRecyclerView
+        android:id="@+id/postRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"/>

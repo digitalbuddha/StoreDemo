@@ -10,4 +10,5 @@ import rx.Observable;
  */
 public interface NetworkDAO<T> {
     Observable<T> fetch( Id<T> id);
+    Observable<T> fresh(Id<T> id);
 }

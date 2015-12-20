@@ -1,7 +1,7 @@
 package com.nytimes.storedemo.di;
 
 import com.nytimes.storedemo.ui.MainView;
-import com.nytimes.storedemo.ui.articlelist.ArticleRecyclerView;
+import com.nytimes.storedemo.ui.redditlist.RedditRecyclerView;
 
 import javax.inject.Singleton;
 
@@ -18,5 +18,5 @@ public interface AppComponent {
 
     void inject(MainView a);
 
-    void inject(ArticleRecyclerView a);
+    void inject(RedditRecyclerView a);
 }

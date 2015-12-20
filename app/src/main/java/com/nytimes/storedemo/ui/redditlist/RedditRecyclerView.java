@@ -1,4 +1,4 @@
-package com.nytimes.storedemo.ui.articlelist;
+package com.nytimes.storedemo.ui.redditlist;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,20 +15,20 @@ import javax.inject.Inject;
 /**
  * Created by brianplummer on 12/16/15.
  */
-public class ArticleRecyclerView extends RecyclerView {
+public class RedditRecyclerView extends RecyclerView {
 
     @Inject
-    protected ArticleAdapter articleAdapter;
+    protected PostAdapter postAdapter;
 
-    public ArticleRecyclerView(Context context) {
+    public RedditRecyclerView(Context context) {
         this(context, null);
     }
 
-    public ArticleRecyclerView(Context context, AttributeSet attrs) {
+    public RedditRecyclerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ArticleRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+    public RedditRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         ((DemoApplication) (context).getApplicationContext()).getApplicationComponent().inject(this);
     }
@@ -42,14 +42,14 @@ public class ArticleRecyclerView extends RecyclerView {
 
         setLayoutManager(layoutManager);
         addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
-        setAdapter(articleAdapter);
+        setAdapter(postAdapter);
     }
 
     public void notifyDataSetChanged() {
-        articleAdapter.notifyDataSetChanged();
+        postAdapter.notifyDataSetChanged();
     }
 
     public void setArticles(List<Children> articles) {
-        articleAdapter.setArticles(articles);
+        postAdapter.setArticles(articles);
     }
 }
