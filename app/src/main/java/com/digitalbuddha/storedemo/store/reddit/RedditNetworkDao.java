@@ -21,11 +21,7 @@ public class RedditNetworkDao extends AbstractNetworkDao<RedditData> {
         return api.aww(id.getKey());
     }
 
-    @Override
-    public Observable<RedditData> fresh(Id<RedditData> id) {
-        removeFromCache(id);
-        return fetch(id);
-    }
+
 
     //url is needed to clear cache
     @Override
