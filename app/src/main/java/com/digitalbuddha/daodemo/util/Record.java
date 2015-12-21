@@ -9,19 +9,19 @@ import java.io.File;
  */
 public class Record<T> {
 
-    private final Id<T> id;
+    private final Request<T> request;
     private final File file;
 
-    public Record(Id<T> id, File file) {
+    public Record(Request<T> request, File file) {
 
-        if (id == null) {
-            throw new NullPointerException("need an Id to create a record");
+        if (request == null) {
+            throw new NullPointerException("need an Request to create a record");
         }
         if (file == null) {
             throw new NullPointerException("need a file to create a record");
         }
 
-        this.id = id;
+        this.request = request;
         this.file = file;
     }
 
@@ -29,8 +29,8 @@ public class Record<T> {
         return file;
     }
 
-    public Id<T> getId() {
-        return id;
+    public Request<T> getRequest() {
+        return request;
     }
 
     public boolean exists() {

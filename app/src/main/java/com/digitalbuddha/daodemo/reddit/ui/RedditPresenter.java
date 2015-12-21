@@ -1,8 +1,8 @@
 package com.digitalbuddha.daodemo.reddit.ui;
 
+import com.digitalbuddha.daodemo.reddit.data.Reddit;
 import com.digitalbuddha.daodemo.reddit.data.model.Children;
-import com.digitalbuddha.daodemo.util.Id;
-import com.digitalbuddha.daodemo.reddit.data.RedditDAO;
+import com.digitalbuddha.daodemo.util.Request;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
 import com.digitalbuddha.daodemo.util.Presenter;
 
@@ -19,9 +19,10 @@ import rx.schedulers.Schedulers;
  */
 public class RedditPresenter implements Presenter<RedditView> {
     public static final String LIMIT = "20";
-    @Inject
-    RedditDAO store;
 
+
+    @Inject
+    Reddit reddit;
     private RedditView view;
 
     @Inject
@@ -39,7 +40,9 @@ public class RedditPresenter implements Presenter<RedditView> {
     }
 
     public Observable<List<Children>> getPosts(){
-        return store.get(Id.of(RedditData.class, LIMIT))
+        Observable<RedditData> aww = reddit.aww(LIMIT);
+        Request<RedditData> request = Request.of(RedditData.class, Reddit.getUrl(), aww);
+        return reddit.run().fresh(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(redditData -> redditData.data().children());

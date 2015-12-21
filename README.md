@@ -66,7 +66,7 @@ public class RedditNetworkDao implements NetworkDAO<RedditData> {
 
     @Override
     //will eventually go to retrofit & okhttp cache
-    public Observable<RedditData> fetch(Id<RedditData> id) {
+    public Observable<RedditData> fetch(Id<RedditData> request) {
         return api.aww();
     }
 }

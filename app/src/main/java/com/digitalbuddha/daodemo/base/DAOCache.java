@@ -2,9 +2,9 @@ package com.digitalbuddha.daodemo.base;
 
 import android.support.annotation.NonNull;
 
+import com.digitalbuddha.daodemo.util.Request;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.digitalbuddha.daodemo.util.Id;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +13,7 @@ import rx.Observable;
 
 public class DAOCache<Parsed> {//DAOCache cache
     //in memory cache of data
-    final Cache<Id<Parsed>, Observable<Parsed>> memory;
+    final Cache<Request<Parsed>, Observable<Parsed>> memory;
 
     private DAOCache() {
         memory = CacheBuilder.newBuilder()
@@ -29,17 +29,17 @@ public class DAOCache<Parsed> {//DAOCache cache
     /**
      * @return data from get
      */
-    protected Observable<Parsed> get(@NonNull final Id<Parsed> id, Observable<Parsed> network) {
+    protected Observable<Parsed> get(@NonNull final Request<Parsed> request) {
         try {
-            return memory.get(id, () -> network);
+            return memory.get(request, () -> request.getResponse());
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
         return Observable.empty();
     }
 
-    protected void update(@NonNull final Id<Parsed> id, final Parsed data) {
-        memory.put(id, Observable.just(data));
+    protected void update(@NonNull final Request<Parsed> request, final Parsed data) {
+        memory.put(request, Observable.just(data));
     }
 
     protected void clearMemory() {
@@ -47,12 +47,12 @@ public class DAOCache<Parsed> {//DAOCache cache
     }
 
     /**
-     * Clear get by id
+     * Clear get by request
      *
-     * @param id of data to clear
+     * @param request of data to clear
      */
-    protected void clearMemory(@NonNull final Id<Parsed> id) {
-        memory.invalidate(id);
+    protected void clearMemory(@NonNull final Request<Parsed> request) {
+        memory.invalidate(request);
     }
 
     /**

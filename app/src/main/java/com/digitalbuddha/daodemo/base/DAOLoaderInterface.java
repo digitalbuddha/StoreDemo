@@ -1,6 +1,6 @@
 package com.digitalbuddha.daodemo.base;
 
-import com.digitalbuddha.daodemo.util.Id;
+import com.digitalbuddha.daodemo.util.Request;
 
 import rx.Observable;
 
@@ -9,7 +9,6 @@ import rx.Observable;
  *
  */
 public interface DAOLoaderInterface<T> {
-    Observable<T> fetch( Id<T> id);
-    Observable<T> fresh(Id<T> id);
-    String getUrl();
+    Observable<T> fetch( Request<T> request);
+    Observable<T> fresh(Request<T> request);
 }

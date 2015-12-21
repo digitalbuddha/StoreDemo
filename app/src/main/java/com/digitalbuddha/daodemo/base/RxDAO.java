@@ -2,7 +2,7 @@ package com.digitalbuddha.daodemo.base;
 
 import android.support.annotation.NonNull;
 
-import com.digitalbuddha.daodemo.util.Id;
+import com.digitalbuddha.daodemo.util.Request;
 
 import rx.Observable;
 
@@ -10,7 +10,7 @@ import rx.Observable;
  * Created by 206847 on 12/19/15.
  */
 public interface RxDAO<T> {
-    Observable<T> get(@NonNull Id<T> id);
+    Observable<T> get(@NonNull Request<T> request);
 
-    Observable<T> fresh(@NonNull Id<T> id);
+    Observable<T> fresh(@NonNull Request<T> request);
 }

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.Objects;
 
+import rx.Observable;
 
 
 /**
@@ -32,10 +33,12 @@ public abstract class Identifier<TYPE, KEY> {
 
     protected final TYPE type;
     protected final KEY key;
+    private Observable response;
 
-    protected Identifier(@NonNull TYPE type, @NonNull KEY key) {
+    protected Identifier(@NonNull TYPE type, @NonNull KEY key, Observable response) {
         this.type = type;
         this.key = key;
+        this.response = response;
     }
 
     public TYPE getType() {
@@ -58,5 +61,9 @@ public abstract class Identifier<TYPE, KEY> {
     @Override
     public int hashCode() {
         return Objects.hashCode(type, key);
+    }
+
+    public Observable getResponse() {
+        return response;
     }
 }
