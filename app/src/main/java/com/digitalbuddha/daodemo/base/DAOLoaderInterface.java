@@ -10,6 +10,6 @@ import rx.Observable;
  */
 public interface DAOLoaderInterface<T> {
     Observable<T> fetch( Id<T> id);
-    Observable<T> fresh(Id<T> id);
-    String getUrl();
+    String getCacheKey(Id<T> id);
+    void removeFromCache(Id<T> id);
 }

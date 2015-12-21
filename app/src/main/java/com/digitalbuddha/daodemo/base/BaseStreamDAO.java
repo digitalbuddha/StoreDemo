@@ -8,16 +8,16 @@ import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 /**
- * Base class for handling Raw and Parsed data subscription logic
+ * Base class for handling Raw and T data subscription logic
  *
- * @param <Parsed> data type after parsing
+ * @param <T> data type after parsing
  *
  */
-public abstract class BaseStreamDAO< Parsed> extends BaseDAO< Parsed> {
+public abstract class BaseStreamDAO<T> extends BaseDAO<T> {
 
-    private final BehaviorSubject<Parsed> subject;
+    private final BehaviorSubject<T> subject;
 
-    public BaseStreamDAO(DAOLoaderInterface<Parsed> DAOLoader) {
+    public BaseStreamDAO(DAOLoaderInterface<T> DAOLoader) {
         super(DAOLoader);
         subject = BehaviorSubject.create();
     }
@@ -25,16 +25,16 @@ public abstract class BaseStreamDAO< Parsed> extends BaseDAO< Parsed> {
     /**
      * To be exposed to clients for subscribing to endless data streams.
      * Any client that subscribers to the steam will receive updates for all data of
-     * type {@link Parsed}
+     * type {@link T}
      */
-    public  Observable<Parsed> stream(){
+    public  Observable<T> stream(){
         return subject.asObservable();
     }
 
     @Override
-    protected Observable<Parsed> getNetworkResponse(@NonNull Id<Parsed> id) {
-        return super.getNetworkResponse(id)
-                .doOnNext(this::notifySubscribers);
+    protected Observable<T> fetch(@NonNull Id<T> id) {
+        return super.fetch(id)
+                .doOnNext(this::notify);
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class BaseStreamDAO< Parsed> extends BaseDAO< Parsed> {
      *
      * @param data to be emitted to subscribers of Subject
      */
-    protected void notifySubscribers(Parsed data) {
+    protected void notify(T data) {
         subject.onNext(data);
     }
 }

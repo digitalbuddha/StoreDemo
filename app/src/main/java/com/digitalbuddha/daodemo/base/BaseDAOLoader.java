@@ -14,12 +14,12 @@ public abstract class BaseDAOLoader<T> implements DAOLoaderInterface<T> {
     @Inject
     OkHttpClient client;
 
-    protected void removeFromCache(Id<T> id) {
+    public void removeFromCache(Id<T> id) {
         try {
             Iterator<String> urls = client.getCache().urls();
             while (urls.hasNext()) {
                 String cachedKey = urls.next();
-                if (cachedKey.equals(getUrl() + id.getKey())) {
+                if (cachedKey.equals(getCacheKey(id) + id.getKey())) {
                     urls.remove();
                 }
             }

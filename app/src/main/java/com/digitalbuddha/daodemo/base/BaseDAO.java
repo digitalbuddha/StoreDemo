@@ -10,9 +10,9 @@ import rx.Observable;
  * BaseDAO to be used for loading an object different data sources
  *
  * @param <T> data type after parsing
- *                 <p>
- *                 get = cached data if not stale otherwise network, updates caches
- *                 network=skip memory and disk cache, still updates caches
+ *            <p>
+ *            get = cached data if not stale otherwise network, updates caches
+ *            network=skip memory and disk cache, still updates caches
  */
 public abstract class BaseDAO<T> implements RxDAO<T> {
     private final DAOCache<T> cache;
@@ -29,8 +29,8 @@ public abstract class BaseDAO<T> implements RxDAO<T> {
      * memory/disk/network that is available and not stale
      */
     @Override
-    public Observable<T> get(@NonNull final Id<T> id)  {
-        return cache.get(id, getNetworkResponse(id));
+    public Observable<T> get(@NonNull final Id<T> id) {
+        return cache.get(id, fetch(id));
     }
 
     /**
@@ -38,11 +38,12 @@ public abstract class BaseDAO<T> implements RxDAO<T> {
      */
     @Override
     public Observable<T> fresh(@NonNull final Id<T> id) {
-        return DAOLoader.fresh(id)
+        return DAOLoader.fetch(id)
+                .doOnSubscribe(() -> DAOLoader.removeFromCache(id))
                 .doOnNext(data -> cache.update(id, data));
     }
 
-    protected Observable<T> getNetworkResponse(@NonNull final Id<T> id) {
+    protected Observable<T> fetch(@NonNull final Id<T> id) {
         return DAOLoader.fetch(id)
                 .doOnNext(data -> cache.update(id, data));
     }

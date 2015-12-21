@@ -21,11 +21,9 @@ public class RedditDaoLoader extends BaseDAOLoader<RedditData> {
         return api.aww(id.getKey());
     }
 
-
-
     //url is needed to clear cache
     @Override
-    public String getUrl() {
-        return "http://reddit.com/r/aww/new/.json?limit=";
+    public String getCacheKey(Id<RedditData> id) {
+        return "http://reddit.com/r/aww/new/.json?limit=" + id.getKey();
     }
 }
