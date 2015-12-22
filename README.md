@@ -1,4 +1,4 @@
-# StoreDemo
+# DAO Framework
 Working with data whether offline or while connected is hard to do in a seamless manner. This project aims to make it easier. 
 
 
