@@ -9,7 +9,7 @@ import rx.Observable;
  *
  */
 public interface DAOLoaderInterface<T> {
+    Observable<T> fetch(Id<T> id, String forceNetwork);
+    Observable<T> fresh( Id<T> id);
     Observable<T> fetch( Id<T> id);
-    Observable<T> fresh(Id<T> id);
-    String getUrl();
 }

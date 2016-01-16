@@ -27,6 +27,7 @@ public class ClientModule {
 
         //create an api with okhttp cache
         Retrofit retrofit = builder
+                .baseUrl("http://reddit.com/")
                 .build();
         return retrofit.create(RedditApi.class);
     }

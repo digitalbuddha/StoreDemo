@@ -17,15 +17,7 @@ public class RedditDaoLoader extends BaseDAOLoader<RedditData> {
     }
 
     @Override
-    public Observable<RedditData> fetch(Id<RedditData> id) {
-        return api.aww(id.getKey());
-    }
-
-
-
-    //url is needed to clear cache
-    @Override
-    public String getUrl() {
-        return "http://reddit.com/r/aww/new/.json?limit=";
+    public Observable<RedditData> fetch(Id<RedditData> id, String forceNetwork) {
+        return api.aww(id.getKey(), forceNetwork);
     }
 }
