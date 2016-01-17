@@ -17,8 +17,8 @@ public abstract class BaseStreamDAO< Parsed> extends BaseDAO< Parsed> {
 
     private final BehaviorSubject<Parsed> subject;
 
-    public BaseStreamDAO(DAOLoaderInterface<Parsed> DAOLoader) {
-        super(DAOLoader);
+    public BaseStreamDAO() {
+        super();
         subject = BehaviorSubject.create();
     }
 

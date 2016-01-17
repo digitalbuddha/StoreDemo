@@ -16,12 +16,10 @@ import rx.Observable;
  */
 public abstract class BaseDAO<T> implements RxDAO<T> {
     private final DAOCache<T> cache;
-    protected final DAOLoaderInterface<T> DAOLoader;
 
 
-    public BaseDAO(DAOLoaderInterface<T> DAOLoader) {
+    public BaseDAO() {
         cache = DAOCache.create();
-        this.DAOLoader = DAOLoader;
     }
 
     /**
@@ -38,14 +36,16 @@ public abstract class BaseDAO<T> implements RxDAO<T> {
      */
     @Override
     public Observable<T> fresh(@NonNull final Id<T> id) {
-        return DAOLoader.fresh(id)
+        return fetch(id,null)
                 .doOnNext(data -> cache.update(id, data));
     }
 
     protected Observable<T> getNetworkResponse(@NonNull final Id<T> id) {
-        return DAOLoader.fetch(id)
+        return fetch(id,"fresh and clean")
                 .doOnNext(data -> cache.update(id, data));
     }
+
+   public abstract Observable<T> fetch(Id<T> id, String forceNetwork);
 
     public void clearMemory() {
         cache.clearMemory();
