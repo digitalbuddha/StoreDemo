@@ -52,8 +52,9 @@ public class RedditView extends CoordinatorLayout {
     private void loadPosts(List<Children> posts) {
         // prefetch images....
         for(Children child : posts) {
+            if(child.data().preview().isPresent())
             Picasso.with(getContext())
-                    .load(child.data().preview().images().get(0).source().url())
+                    .load(child.data().preview().get().images().get(0).source().url())
                     .fetch();
         }
         redditRecyclerView.setArticles(posts);

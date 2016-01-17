@@ -52,8 +52,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void onBind(Children article) {
         title.setText(article.data().title());
+        if(article.data().preview().isPresent())
+        {
+            showImage(article);
+        }
+    }
 
-        Image image = article.data().preview().images().get(0).source();
+    private void showImage(Children article) {
+        Image image = article.data().preview().get().images().get(0).source();
         BitmapTransform bitmapTransform = new BitmapTransform(maxWidth, maxHeight, image);
 
         int targetWidth = bitmapTransform.targetWidth;
