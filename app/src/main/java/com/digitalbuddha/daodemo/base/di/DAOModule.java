@@ -2,14 +2,11 @@ package com.digitalbuddha.daodemo.base.di;
 
 import android.app.Application;
 
+import com.digitalbuddha.daodemo.base.CacheInterceptor;
 import com.digitalbuddha.daodemo.base.di.anotation.ClientCache;
-import com.digitalbuddha.daodemo.util.NetworkStatus;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +39,7 @@ public class DAOModule {
 
     @Singleton
     @Provides
-    OkHttpClient provideCachedClient(@ClientCache File cacheDir,Interceptor interceptor) {
+    OkHttpClient provideCachedClient(@ClientCache File cacheDir,CacheInterceptor interceptor) {
 
         Cache cache = new Cache(cacheDir, 20 * 1024 * 1024);
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -51,23 +48,7 @@ public class DAOModule {
         okHttpClient.networkInterceptors().add(interceptor);
         return okHttpClient;
     }
-    @Singleton
-    @Provides
-    Interceptor provideCachedInteceptor(NetworkStatus networkStatus) {
-        return chain -> {
-            Request originalRequest = chain.request();
-            String cacheHeaderValue = networkStatus.isOnGoodConnection()
-                    ? "public, max-age=2419200"
-                    : "public, only-if-cached, max-stale=2419200";
-            Request request = originalRequest.newBuilder().build();
-            Response response = chain.proceed(request);
-            return response.newBuilder()
-                    .removeHeader("Pragma")
-                    .removeHeader("Cache-Control")
-                    .header("Cache-Control", cacheHeaderValue)
-                    .build();
-        };
-    }
+
 
     @Singleton
     @Provides
@@ -82,8 +63,7 @@ public class DAOModule {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(cachedClient)
-                .baseUrl("http://reddit.com/");
+                .client(cachedClient);
     }
 
     @Singleton

@@ -1,6 +1,8 @@
 package com.digitalbuddha.daodemo.reddit.ui;
 
+import com.digitalbuddha.daodemo.reddit.data.RedditApi;
 import com.digitalbuddha.daodemo.reddit.data.model.Children;
+import com.digitalbuddha.daodemo.reddit.data.model.Data;
 import com.digitalbuddha.daodemo.util.Id;
 import com.digitalbuddha.daodemo.reddit.data.RedditDAO;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
@@ -11,12 +13,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by 206847 on 12/13/15.
- */
 public class RedditPresenter implements Presenter<RedditView> {
     public static final String LIMIT = "20";
     @Inject

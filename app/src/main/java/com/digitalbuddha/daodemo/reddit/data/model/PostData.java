@@ -1,5 +1,7 @@
 package com.digitalbuddha.daodemo.reddit.data.model;
 
+import com.google.common.base.Optional;
+
 import org.immutables.value.Value;
 
 /**
@@ -9,5 +11,5 @@ import org.immutables.value.Value;
 public abstract class PostData {
     public abstract String title();
     public abstract String thumbnail();
-    public abstract Preview preview();
+    public abstract Optional<Preview> preview();
 }
