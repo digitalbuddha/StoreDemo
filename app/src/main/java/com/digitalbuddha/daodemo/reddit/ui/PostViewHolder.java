@@ -22,32 +22,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     @Inject
     protected DeviceUtils deviceUtils;
-    private int maxHeight, margin, maxWidth;
+    private int maxHeight;
+    private int maxWidth;
     private TextView title;
     private ImageView thumbnail;
     private View topSpacer;
 
     public PostViewHolder(View itemView) {
         super(itemView);
-        int screenWidth, screenHeight;
-        ((DemoApplication)itemView.getContext()
-                .getApplicationContext())
-                .getApplicationComponent()
-                .inject(this);
-        title = (TextView) itemView.findViewById(R.id.title);
-        thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-        topSpacer = itemView.findViewById(R.id.topSpacer);
-        screenWidth = deviceUtils.getScreenWidth();
-        screenHeight = deviceUtils.getScreenHeight();
-
-        if (screenWidth > screenHeight) {
-            screenHeight = deviceUtils.getScreenWidth();
-            screenWidth = deviceUtils.getScreenHeight();
-        }
-
-        maxHeight = (int) (screenHeight * .55f);
-        margin = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.post_horizontal_margin);
-        maxWidth = screenWidth - (2 * margin);
+        performInjection(itemView);
+        findViews(itemView);
+        setMaxHeighAndWidth(itemView);
     }
 
     public void onBind(Children article) {
@@ -71,11 +56,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             topSpacer.setVisibility(View.VISIBLE);
         }
 
-        thumbnail.setMaxWidth(targetWidth);
-        thumbnail.setMaxHeight(targetHeight);
-        thumbnail.setMinimumWidth(targetWidth);
-        thumbnail.setMinimumHeight(targetHeight);
-        thumbnail.requestLayout();
+        setupThumbnail(targetWidth, targetHeight);
 
         Picasso.with(itemView.getContext())
                 .load(image.url())
@@ -84,5 +65,42 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 .centerInside()
                 .placeholder(R.color.gray80)
                 .into(thumbnail);
+    }
+
+    private void setupThumbnail(int targetWidth, int targetHeight) {
+        thumbnail.setMaxWidth(targetWidth);
+        thumbnail.setMaxHeight(targetHeight);
+        thumbnail.setMinimumWidth(targetWidth);
+        thumbnail.setMinimumHeight(targetHeight);
+        thumbnail.requestLayout();
+    }
+
+    private void setMaxHeighAndWidth(View itemView) {
+        int screenWidth;
+        int screenHeight;
+        screenWidth = deviceUtils.getScreenWidth();
+        screenHeight = deviceUtils.getScreenHeight();
+
+        if (screenWidth > screenHeight) {
+            screenHeight = deviceUtils.getScreenWidth();
+            screenWidth = deviceUtils.getScreenHeight();
+        }
+
+        maxHeight = (int) (screenHeight * .55f);
+        int margin = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.post_horizontal_margin);
+        maxWidth = screenWidth - (2 * margin);
+    }
+
+    private void findViews(View itemView) {
+        title = (TextView) itemView.findViewById(R.id.title);
+        thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+        topSpacer = itemView.findViewById(R.id.topSpacer);
+    }
+
+    private void performInjection(View itemView) {
+        ((DemoApplication)itemView.getContext()
+                .getApplicationContext())
+                .getApplicationComponent()
+                .inject(this);
     }
 }

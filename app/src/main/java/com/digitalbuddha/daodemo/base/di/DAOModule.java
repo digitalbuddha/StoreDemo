@@ -44,8 +44,8 @@ public class DAOModule {
         Cache cache = new Cache(cacheDir, 20 * 1024 * 1024);
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setCache(cache);
-        okHttpClient.interceptors().add(interceptor);
-        okHttpClient.networkInterceptors().add(interceptor);
+        okHttpClient.interceptors().add(interceptor); //needed for force network
+        okHttpClient.networkInterceptors().add(interceptor); //needed for offline mode
         return okHttpClient;
     }
 

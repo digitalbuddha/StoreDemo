@@ -36,12 +36,12 @@ public abstract class BaseDAO<T> implements RxDAO<T> {
      */
     @Override
     public Observable<T> fresh(@NonNull final Id<T> id) {
-        return fetch(id,null)
+        return fetch(id,"fresh and clean")
                 .doOnNext(data -> cache.update(id, data));
     }
 
     protected Observable<T> getNetworkResponse(@NonNull final Id<T> id) {
-        return fetch(id,"fresh and clean")
+        return fetch(id,null)
                 .doOnNext(data -> cache.update(id, data));
     }
 
