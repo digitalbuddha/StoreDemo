@@ -15,7 +15,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class RedditPresenter implements Presenter<RedditView> {
-    public static final String LIMIT = "20";
+    public static final String LIMIT = "100";
     @Inject
     RedditDAO store;
 
