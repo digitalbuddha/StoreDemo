@@ -6,9 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.digitalbuddha.daodemo.DemoApplication;
-import com.digitalbuddha.daodemo.reddit.data.model.Children;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,7 +15,7 @@ import javax.inject.Inject;
 public class RedditRecyclerView extends RecyclerView {
 
     @Inject
-    protected PostAdapter postAdapter;
+    PostAdapter postAdapter;
 
     public RedditRecyclerView(Context context) {
         this(context, null);
@@ -37,19 +34,13 @@ public class RedditRecyclerView extends RecyclerView {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        setLayoutManager(layoutManager);
-        //addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+        setOrientation();
         setAdapter(postAdapter);
     }
 
-    public void notifyDataSetChanged() {
-        postAdapter.notifyDataSetChanged();
-    }
-
-    public void setArticles(List<Children> articles) {
-        postAdapter.setArticles(articles);
+    private void setOrientation() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        setLayoutManager(layoutManager);
     }
 }

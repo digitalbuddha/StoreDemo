@@ -21,7 +21,7 @@ import javax.inject.Inject;
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
     @Inject
-    protected DeviceUtils deviceUtils;
+    DeviceUtils deviceUtils;
     private int maxHeight;
     private int maxWidth;
     private TextView title;
@@ -32,13 +32,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         performInjection(itemView);
         findViews(itemView);
-        setMaxHeighAndWidth(itemView);
+        setMaxDimensions(itemView);
     }
 
     public void onBind(Children article) {
         title.setText(article.data().title());
-        if(article.data().preview().isPresent())
-        {
+        if (article.data().preview().isPresent()) {
             showImage(article);
         }
     }
@@ -50,11 +49,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         int targetWidth = bitmapTransform.targetWidth;
         int targetHeight = bitmapTransform.targetHeight;
 
-        if (targetWidth >= targetHeight) {
-            topSpacer.setVisibility(View.GONE);
-        } else {
-            topSpacer.setVisibility(View.VISIBLE);
-        }
+        setSpacer(targetWidth, targetHeight);
 
         setupThumbnail(targetWidth, targetHeight);
 
@@ -67,6 +62,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 .into(thumbnail);
     }
 
+    private void setSpacer(int targetWidth, int targetHeight) {
+        if (targetWidth >= targetHeight) {
+            topSpacer.setVisibility(View.GONE);
+        } else {
+            topSpacer.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setupThumbnail(int targetWidth, int targetHeight) {
         thumbnail.setMaxWidth(targetWidth);
         thumbnail.setMaxHeight(targetHeight);
@@ -75,7 +78,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         thumbnail.requestLayout();
     }
 
-    private void setMaxHeighAndWidth(View itemView) {
+    private void setMaxDimensions(View itemView) {
         int screenWidth;
         int screenHeight;
         screenWidth = deviceUtils.getScreenWidth();
@@ -98,7 +101,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void performInjection(View itemView) {
-        ((DemoApplication)itemView.getContext()
+        ((DemoApplication) itemView.getContext()
                 .getApplicationContext())
                 .getApplicationComponent()
                 .inject(this);

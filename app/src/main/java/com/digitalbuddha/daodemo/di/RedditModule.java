@@ -12,7 +12,7 @@ import dagger.Provides;
 import retrofit.Retrofit;
 
 @Module
-public class ClientModule {
+public class RedditModule {
     @Singleton
     @Provides
     Gson provideGson() {

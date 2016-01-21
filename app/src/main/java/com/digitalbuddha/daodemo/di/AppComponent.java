@@ -15,7 +15,7 @@ import dagger.Component;
  */
 @Singleton
 @Component(
-        modules = {ClientModule.class,DAOModule.class}
+        modules = {RedditModule.class,DAOModule.class}
 )
 public interface AppComponent {
     void inject(RedditView a);

@@ -12,7 +12,7 @@ public class DemoApplication extends android.app.Application {
 
     private AppComponent component;
     @Inject
-    Picasso picasso;
+    Picasso picasso; //Picasso, now with more Disk Caching!
 
     @Override
     public void onCreate() {
@@ -21,12 +21,8 @@ public class DemoApplication extends android.app.Application {
         component = DaggerAppComponent.builder()
                 .dAOModule(new DAOModule(this))
                 .build();
-
         component.inject(this);
 
-        //PICASSO SETUP and debug if desired
-        //picasso.setIndicatorsEnabled(true);
-        //picasso.setLoggingEnabled(true);
         Picasso.setSingletonInstance(picasso);
     }
 
