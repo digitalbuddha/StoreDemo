@@ -1,6 +1,6 @@
 package com.digitalbuddha.daodemo.di;
 
-import com.digitalbuddha.daodemo.base.di.DAOModule;
+import com.digitalbuddha.daodemo.base.di.StoreModule;
 import com.digitalbuddha.daodemo.reddit.ui.RedditView;
 import com.digitalbuddha.daodemo.reddit.ui.PostViewHolder;
 import com.digitalbuddha.daodemo.DemoApplication;
@@ -15,7 +15,7 @@ import dagger.Component;
  */
 @Singleton
 @Component(
-        modules = {RedditModule.class,DAOModule.class}
+        modules = {RedditModule.class,StoreModule.class}
 )
 public interface AppComponent {
     void inject(RedditView a);

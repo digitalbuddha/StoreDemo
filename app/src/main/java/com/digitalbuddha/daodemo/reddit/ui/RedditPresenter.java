@@ -1,6 +1,6 @@
 package com.digitalbuddha.daodemo.reddit.ui;
 
-import com.digitalbuddha.daodemo.reddit.data.RedditDAO;
+import com.digitalbuddha.daodemo.reddit.data.RedditStore;
 import com.digitalbuddha.daodemo.reddit.data.model.Children;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
 import com.digitalbuddha.daodemo.util.Id;
@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 public class RedditPresenter implements Presenter<RedditView> {
     public static final String LIMIT = "100";
     @Inject
-    RedditDAO store;
+    RedditStore store;
 
     private RedditView view;
 

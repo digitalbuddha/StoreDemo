@@ -1,7 +1,7 @@
 package com.digitalbuddha.daodemo.reddit.data;
 
 
-import com.digitalbuddha.daodemo.base.BaseDAO;
+import com.digitalbuddha.daodemo.base.RxStore;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
 import com.digitalbuddha.daodemo.util.Id;
 
@@ -12,11 +12,11 @@ import rx.Observable;
 
 
 @Singleton
-public class RedditDAO extends BaseDAO<RedditData> {
+public class RedditStore extends RxStore<RedditData> {
     @Inject RedditApi api;
 
     @Inject
-    public RedditDAO() {
+    public RedditStore() {
         super();
     }
 

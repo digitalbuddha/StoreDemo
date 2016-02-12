@@ -11,19 +11,19 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 
-public class DAOCache<Parsed> {//DAOCache cache
+public class RxCache<Parsed> {//RxCache cache
     //in memory cache of data
     final Cache<Id<Parsed>, Observable<Parsed>> memory;
 
-    private DAOCache() {
+    private RxCache() {
         memory = CacheBuilder.newBuilder()
                 .maximumSize(getCacheSize())
                 .expireAfterAccess(getCacheTTL(), TimeUnit.MILLISECONDS)
                 .build();
     }
 
-    public static <Parsed> DAOCache<Parsed> create() {
-        return new DAOCache<>();
+    public static <Parsed> RxCache<Parsed> create() {
+        return new RxCache<>();
     }
 
     /**

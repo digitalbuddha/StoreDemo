@@ -21,11 +21,11 @@ import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
 @Module
-public class DAOModule {
+public class StoreModule {
 
     private Application context;
 
-    public DAOModule(Application context) {
+    public StoreModule(Application context) {
         this.context = context;
     }
 
