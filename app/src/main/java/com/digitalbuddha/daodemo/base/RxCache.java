@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 
-public class RxCache<Parsed> {//RxCache cache
+public final class RxCache<Request, Response> {//RxCache cache
     //in memory cache of data
-    final Cache<Id<Parsed>, Observable<Parsed>> memory;
+    final Cache<Request, Observable<Response>> memory;
 
     private RxCache() {
         memory = CacheBuilder.newBuilder()
@@ -22,37 +22,32 @@ public class RxCache<Parsed> {//RxCache cache
                 .build();
     }
 
-    public static <Parsed> RxCache<Parsed> create() {
+    public static <Request, Response> RxCache<Request, Response> create() {
         return new RxCache<>();
     }
 
     /**
      * @return data from get
      */
-    protected Observable<Parsed> get(@NonNull final Id<Parsed> id, Observable<Parsed> network) {
+    Observable<Response> get(@NonNull final Request request, Observable<Response> network) {
         try {
-            return memory.get(id, () -> network);
+            return memory.get(request, network::cache);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            //no-op
         }
         return Observable.empty();
     }
 
-    protected void update(@NonNull final Id<Parsed> id, final Parsed data) {
-        memory.put(id, Observable.just(data));
+    void update(@NonNull final Request request, final Response data) {
+        memory.put(request, Observable.just(data));
     }
 
-    protected void clearMemory() {
+    void clearMemory() {
         memory.invalidateAll();
     }
 
-    /**
-     * Clear get by id
-     *
-     * @param id of data to clear
-     */
-    protected void clearMemory(@NonNull final Id<Parsed> id) {
-        memory.invalidate(id);
+    void clearMemory(@NonNull Request request) {
+        memory.invalidate(request);
     }
 
     /**
@@ -60,7 +55,7 @@ public class RxCache<Parsed> {//RxCache cache
      *
      * @return get cache ttl
      */
-    protected long getCacheTTL() {
+    long getCacheTTL() {
         return TimeUnit.HOURS.toMillis(24);
     }
 
@@ -69,7 +64,7 @@ public class RxCache<Parsed> {//RxCache cache
      *
      * @return get cache size
      */
-    protected int getCacheSize() {
-        return 1;
+    int getCacheSize() {
+        return 30;
     }
 }
