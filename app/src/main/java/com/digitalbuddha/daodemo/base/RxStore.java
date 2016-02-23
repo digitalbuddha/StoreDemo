@@ -14,8 +14,9 @@ import rx.Observable;
  *                 get = cached data if not stale otherwise network, updates caches
  *                 network=skip memory and disk cache, still updates caches
  */
-public abstract class RxStore<T> implements Store<T> {
-    private final RxCache<T> cache;
+public abstract class RxStore<Response, Request> implements Store<Response, Request> {
+    public static final String SUCCESS_RESPONSE = "SUCCESS";
+    private final RxCache<Request, Response> cache;
 
 
     public RxStore() {
@@ -27,32 +28,33 @@ public abstract class RxStore<T> implements Store<T> {
      * memory/disk/network that is available and not stale
      */
     @Override
-    public Observable<T> get(@NonNull final Id<T> id)  {
-        return cache.get(id, getNetworkResponse(id));
+    public Observable<Response> get(Request request) {
+        return cache.get(request, getNetworkResponse(request));
     }
 
     /**
      * @return force network and update disk/memory
      */
     @Override
-    public Observable<T> fresh(@NonNull final Id<T> id) {
-        return fetch(id,"fresh and clean")
-                .doOnNext(data -> cache.update(id, data));
+    public Observable<Response> fresh(@NonNull Request request) {
+        return fetch(request, "fresh and clean")
+                .doOnNext(data -> cache.update(request, data));
     }
 
-    protected Observable<T> getNetworkResponse(@NonNull final Id<T> id) {
-        return fetch(id,null)
-                .doOnNext(data -> cache.update(id, data));
+    protected Observable<Response> getNetworkResponse(@NonNull final Request request) {
+        return fetch(request, null).doOnNext(response -> {
+          //nothing
+        });
     }
 
-   public abstract Observable<T> fetch(Id<T> id, String forceNetwork);
+    public abstract Observable<Response> fetch(Request request, String forceNetwork);
 
     public void clearMemory() {
         cache.clearMemory();
     }
 
-    public void clearMemory(@NonNull final Id<T> id) {
-        cache.clearMemory(id);
+    public void clearMemory(@NonNull final Request request) {
+        cache.clearMemory(request);
     }
 
 }
