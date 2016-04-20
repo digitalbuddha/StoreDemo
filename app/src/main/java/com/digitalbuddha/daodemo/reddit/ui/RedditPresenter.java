@@ -3,7 +3,6 @@ package com.digitalbuddha.daodemo.reddit.ui;
 import com.digitalbuddha.daodemo.reddit.data.RedditStore;
 import com.digitalbuddha.daodemo.reddit.data.model.Children;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
-import com.digitalbuddha.daodemo.util.Id;
 import com.digitalbuddha.daodemo.util.Presenter;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +36,7 @@ public class RedditPresenter implements Presenter<RedditView> {
     }
 //
     public Observable<List<Children>> getPosts(){
-        return store.get(Id.of(RedditData.class, LIMIT))
+        return store.get(LIMIT)
                .doOnNext(this::prefetchImages)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

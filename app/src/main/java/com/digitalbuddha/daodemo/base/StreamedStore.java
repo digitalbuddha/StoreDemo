@@ -2,20 +2,17 @@ package com.digitalbuddha.daodemo.base;
 
 import android.support.annotation.NonNull;
 
-import com.digitalbuddha.daodemo.util.Id;
-
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 /**
  * Base class for handling Raw and Parsed data subscription logic
  *
- * @param <Parsed> data type after parsing
- *
+ * @param <Response> data type after parsing
  */
-public abstract class StreamedStore< Parsed> extends RxStore< Parsed> {
+public abstract class StreamedStore<Response, Request> extends BaseStore<Response, Request> {
 
-    private final BehaviorSubject<Parsed> subject;
+    private final BehaviorSubject<Response> subject;
 
     public StreamedStore() {
         super();
@@ -25,15 +22,15 @@ public abstract class StreamedStore< Parsed> extends RxStore< Parsed> {
     /**
      * To be exposed to clients for subscribing to endless data streams.
      * Any client that subscribers to the steam will receive updates for all data of
-     * type {@link Parsed}
+     * type {@link Response}
      */
-    public  Observable<Parsed> stream(){
+    public Observable<Response> stream() {
         return subject.asObservable();
     }
 
     @Override
-    protected Observable<Parsed> getNetworkResponse(@NonNull Id<Parsed> id) {
-        return super.getNetworkResponse(id)
+    protected Observable<Response> getNetworkResponse(@NonNull Request request) {
+        return super.getNetworkResponse(request)
                 .doOnNext(this::notifySubscribers);
     }
 
@@ -42,7 +39,7 @@ public abstract class StreamedStore< Parsed> extends RxStore< Parsed> {
      *
      * @param data to be emitted to subscribers of Subject
      */
-    protected void notifySubscribers(Parsed data) {
+    protected void notifySubscribers(Response data) {
         subject.onNext(data);
     }
 }
