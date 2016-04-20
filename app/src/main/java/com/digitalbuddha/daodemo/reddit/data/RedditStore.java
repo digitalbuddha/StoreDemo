@@ -1,9 +1,8 @@
 package com.digitalbuddha.daodemo.reddit.data;
 
 
-import com.digitalbuddha.daodemo.base.RxStore;
+import com.digitalbuddha.daodemo.base.BaseStore;
 import com.digitalbuddha.daodemo.reddit.data.model.RedditData;
-import com.digitalbuddha.daodemo.util.Id;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,7 +11,7 @@ import rx.Observable;
 
 
 @Singleton
-public class RedditStore extends RxStore<RedditData> {
+public class RedditStore extends BaseStore<RedditData,String> {
     @Inject RedditApi api;
 
     @Inject
@@ -20,7 +19,7 @@ public class RedditStore extends RxStore<RedditData> {
         super();
     }
 
-    public Observable<RedditData> fetch(Id<RedditData> id, String forceNetwork) {
-        return api.aww(id.getKey(),forceNetwork);
+    public Observable<RedditData> fetch(String limit, String forceNetwork) {
+        return api.aww(limit,forceNetwork);
     }
 }

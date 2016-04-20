@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.digitalbuddha.daodemo.util.Id;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;

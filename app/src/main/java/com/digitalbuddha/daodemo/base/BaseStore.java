@@ -2,24 +2,22 @@ package com.digitalbuddha.daodemo.base;
 
 import android.support.annotation.NonNull;
 
-import com.digitalbuddha.daodemo.util.Id;
-
 import rx.Observable;
 
 /**
  * RxStore to be used for loading an object different data sources
  *
- * @param <T> data type after parsing
- *                 <p>
- *                 get = cached data if not stale otherwise network, updates caches
- *                 network=skip memory and disk cache, still updates caches
+ * @param <Response> data type after parsing
+ *            <p>
+ *            get = cached data if not stale otherwise network, updates caches
+ *            fresh=skip memory and disk cache
  */
-public abstract class RxStore<Response, Request> implements Store<Response, Request> {
+public abstract class BaseStore<Response, Request> implements Store<Response, Request> {
     public static final String SUCCESS_RESPONSE = "SUCCESS";
     private final RxCache<Request, Response> cache;
 
 
-    public RxStore() {
+    public BaseStore() {
         cache = RxCache.create();
     }
 
@@ -47,7 +45,7 @@ public abstract class RxStore<Response, Request> implements Store<Response, Requ
         });
     }
 
-    public abstract Observable<Response> fetch(Request request, String forceNetwork);
+    protected abstract Observable<Response> fetch(Request request, String forceNetwork);
 
     public void clearMemory() {
         cache.clearMemory();
@@ -58,4 +56,3 @@ public abstract class RxStore<Response, Request> implements Store<Response, Requ
     }
 
 }
-
